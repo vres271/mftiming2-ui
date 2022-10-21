@@ -28,6 +28,20 @@ export class APIService {
       )
   }
 
+  delete(entityName:string, id:number):Observable<any> {
+    return this.http.delete(`${this.apiURL}${entityName}/${id}`)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
+
+  patch(entityName:string, id:number, data:any):Observable<any> {
+    return this.http.patch(`${this.apiURL}${entityName}/${id}`, data)
+      .pipe(
+        catchError(this.handleError)
+      )
+  }
+
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       console.error('An error occurred:', error.error);

@@ -26,6 +26,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import {MenubarModule} from 'primeng/menubar';
+import {InputSwitchModule} from 'primeng/inputswitch';
 
 
 
@@ -65,6 +66,7 @@ import { UsersComponent } from './components/users/users.component';
     ConfirmDialogModule,
     InputTextareaModule,    
     MenubarModule,
+    InputSwitchModule,
    ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 // import { Observable, throwError } from 'rxjs';
 // import { UsersService } from './../../services/users.service';
 // import { Component, OnInit } from '@angular/core';
@@ -51,15 +51,10 @@ export class User {
 export class UsersComponent implements OnInit {
 
     userDialog: boolean;
-
     users: User[];
-
     user: User;
-
     selectedUsers: User[];
-
     submitted: boolean;
-
     statuses: any[];
 
     constructor(private usersService: UsersService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
@@ -86,6 +81,7 @@ export class UsersComponent implements OnInit {
             header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
+                
                 this.users = this.users.filter(val => !this.selectedUsers?.includes(val));
                 this.selectedUsers = [];
                 this.messageService.add({severity:'success', summary: 'Successful', detail: 'Users Deleted', life: 3000});
@@ -104,9 +100,17 @@ export class UsersComponent implements OnInit {
             header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.users = this.users.filter(val => val.id !== user.id);
-                this.user = new User;
-                this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
+                this.usersService.deleteUser(user.id)
+                  .pipe(
+                    catchError(this.errorHandler)
+                  )
+                  .subscribe(res=>{
+                    console.log(res)
+                    this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
+                    this.users = this.users.filter(val => val.id !== user.id);
+                  })
+
+
             }
         });
     }
@@ -119,31 +123,26 @@ export class UsersComponent implements OnInit {
 
     saveUser() {
         this.submitted = true;
-
+        
         if (this.user.login.trim()) {
             if (this.user.id) {
-                this.users[this.findIndexById(String(this.user.id))] = this.user;
-                this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Updated', life: 3000});
-            }
-            else {
-                //this.user.id = this.createId();
+                let updatedUser = this.user
+                this.usersService.updateUser(updatedUser)
+                    .pipe(
+                        catchError(this.errorHandler)
+                    )
+                    .subscribe(res => {
+                        this.users[this.findIndexById(String(updatedUser.id))] = updatedUser;
+                        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
+                    })             
+            } else {
                 this.usersService.createUser(this.user)
                   .pipe(
-                    catchError((error: HttpErrorResponse)=>{
-                      console.log(error)
-                      if (error.status === 0) {
-                        this.messageService.add({severity:'error', summary: 'An error occurred:', detail: error.error, life: 7000});
-                      } else if(error.error) {
-                        this.messageService.add({severity:'error', summary: error.error.statusCode+' : '+error.error.error, detail:error.error.message , life: 7000});
-                      } else {
-                        this.messageService.add({severity:'error', summary: `Backend returned code ${error.status}, body was: `, detail: error.error, life: 7000});
-                      }
-                      return throwError(() => new Error('Something bad happened; please try again later.'));
-                    })
+                    catchError(this.errorHandler)
                   )
                   .subscribe(res=>{
-                    console.log(res)
                     let createdUser = new User;
+                    createdUser.id = res.id
                     createdUser.login = res.login
                     createdUser.firstName = res.firstName
                     createdUser.secondName = res.secondName
@@ -161,15 +160,25 @@ export class UsersComponent implements OnInit {
         }
     }
 
+    private errorHandler = (error: HttpErrorResponse)=>{
+        if (error.status === 0) {
+          this.messageService.add({severity:'error', summary: 'An error occurred:', detail: error.error, life: 7000});
+        } else if(error.error) {
+          this.messageService.add({severity:'error', summary: error.error.statusCode+' : '+error.error.error, detail:error.error.message , life: 7000});
+        } else {
+          this.messageService.add({severity:'error', summary: `Backend returned code ${error.status}, body was: `, detail: error.error, life: 7000});
+        }
+        return throwError(() => new Error('Something bad happened; please try again later.'));
+    }
+
     findIndexById(id: string): number {
         let index = -1;
-        // for (let i = 0; i < this.users.length; i++) {
-        //     if (this.users[i].id === id) {
-        //         index = i;
-        //         break;
-        //     }
-        // }
-
+        for (let i = 0; i < this.users.length; i++) {
+            if (this.users[i].id === +id) {
+                index = i;
+                break;
+            }
+        }
         return index;
     }
 

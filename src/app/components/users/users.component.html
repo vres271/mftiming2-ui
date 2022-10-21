@@ -22,9 +22,20 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['login','firstName','secondName','thirdName']" responsiveLayout="scroll"
-        [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <p-table #dt 
+        [value]="users" 
+        [rows]="10" 
+        [paginator]="true" 
+        [globalFilterFields]="['login','firstName','secondName','thirdName']" 
+        responsiveLayout="scroll"
+        [(selection)]="selectedUsers" 
+        [rowHover]="true" 
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
+        [showCurrentPageReport]="true"
+        [rowsPerPageOptions]="[10,25,50]"
+        styleClass="p-datatable-sm"
+        >
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <h5 class="m-0">Manage Users</h5>
@@ -36,31 +47,26 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th style="width: 3rem">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                </th>
+                <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
+                <th style="width: 3rem"></th>
                 <th pSortableColumn="login">Login <p-sortIcon field="login"></p-sortIcon></th>
                 <th pSortableColumn="firstName">firstName <p-sortIcon field="firstName"></p-sortIcon></th>
                 <th pSortableColumn="secondName">secondName <p-sortIcon field="secondName"></p-sortIcon></th>
                 <th pSortableColumn="thirdName">thirdName <p-sortIcon field="thirdName"></p-sortIcon></th>
-                <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
-                <th></th>
+                <th pSortableColumn="isActive">isActive <p-sortIcon field="isActive"></p-sortIcon></th>
+                <th style="width: 3rem"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
             <tr>
-                <td>
-                    <p-tableCheckbox [value]="user"></p-tableCheckbox>
-                </td>
+                <td><p-tableCheckbox [value]="user"></p-tableCheckbox></td>
+                <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="editUser(user)"></button></td>
                 <td>{{user.login}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
-                <td><span [class]="'user-badge status-' + (user.inventoryStatus ? user.inventoryStatus.toLowerCase() : '')">{{user.inventoryStatus}}</span></td>
-                <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editUser(user)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteUser(user)"></button>
-                </td>
+                <td>{{user.isActive}}</td>
+                <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteUser(user)"></button></td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary">
@@ -89,6 +95,10 @@
         <div class="field">
             <label for="thirdName">thirdName</label>
             <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
+        </div>
+        <div class="field">
+            <div><label for="isActive">isActive</label></div>
+            <p-inputSwitch [(ngModel)]="user.isActive" id="isActive"></p-inputSwitch>
         </div>
 
     </ng-template>
