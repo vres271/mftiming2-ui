@@ -10,11 +10,12 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class APIService {
+  private apiURL = 'http://localhost:3003/';
 
   constructor(private http: HttpClient) { }
 
   get(entityName:string):Observable<any> {
-    return this.http.get('http://localhost:3003/'+entityName)
+    return this.http.get(this.apiURL+entityName)
       .pipe(
         catchError(this.handleError)
       )
