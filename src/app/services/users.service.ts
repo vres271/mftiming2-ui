@@ -9,7 +9,7 @@ export class UsersService {
 
   constructor(private apiService: APIService) { }
 
-  get():Observable<any> {
+  getUsers():Observable<any> {
     return this.apiService.get('users')
   }
 
