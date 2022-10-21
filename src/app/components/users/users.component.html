@@ -10,7 +10,7 @@
 
 <p-toast></p-toast>
 
-<div class="card">
+<div class="card ">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
@@ -22,7 +22,7 @@
         </ng-template>
     </p-toolbar>
 
-    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['name','country.name','representative.name','status']" responsiveLayout="scroll"
+    <p-table #dt [value]="users" [rows]="10" [paginator]="true" [globalFilterFields]="['login','firstName','secondName','thirdName']" responsiveLayout="scroll"
         [(selection)]="selectedUsers" [rowHover]="true" dataKey="id"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
@@ -30,7 +30,7 @@
                 <h5 class="m-0">Manage Users</h5>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
-                    <!-- <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Search..." /> -->
+                    <input pInputText type="text" #filterInput (input)="dt.filterGlobal(filterInput.value, 'contains')" placeholder="Search..." />
                 </span>
             </div>
         </ng-template>
