@@ -19,7 +19,13 @@ export class APIService {
       .pipe(
         catchError(this.handleError)
       )
+  }
 
+  post(entityName:string, data:any):Observable<any> {
+    return this.http.post(this.apiURL+entityName, data)
+      .pipe(
+        catchError(this.handleError)
+      )
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -29,6 +35,7 @@ export class APIService {
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
     }
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(error);
+    // return throwError(() => new Error('Something bad happened; please try again later.'));
   }  
 }

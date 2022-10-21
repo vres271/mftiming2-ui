@@ -80,7 +80,15 @@
         </div>
         <div class="field">
             <label for="firstName">firstName</label>
-            <textarea id="firstName" pInputTextarea [(ngModel)]="user.firstName" required rows="3" cols="20"></textarea>
+            <input type="text" pInputText id="firstName" [(ngModel)]="user.firstName" required  />
+        </div>
+        <div class="field">
+            <label for="secondName">secondName</label>
+            <input type="text" pInputText id="secondName" [(ngModel)]="user.secondName" required  />
+        </div>
+        <div class="field">
+            <label for="thirdName">thirdName</label>
+            <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
         </div>
 
     </ng-template>

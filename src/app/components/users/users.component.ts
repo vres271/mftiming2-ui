@@ -1,4 +1,6 @@
-// import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+// import { Observable, throwError } from 'rxjs';
 // import { UsersService } from './../../services/users.service';
 // import { Component, OnInit } from '@angular/core';
 
@@ -23,6 +25,7 @@ import { Component, OnInit } from '@angular/core';
 import { UsersService } from './../../services/users.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { Observable, throwError } from 'rxjs';
 
 export class User {
   id: number
@@ -59,10 +62,10 @@ export class UsersComponent implements OnInit {
 
     statuses: any[];
 
-    constructor(private userService: UsersService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+    constructor(private usersService: UsersService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
 
     ngOnInit() {
-        this.userService.getUsers().subscribe(data => this.users = data);
+        this.usersService.getUsers().subscribe(data => this.users = data);
 
         this.statuses = [
             {label: 'INSTOCK', value: 'instock'},
@@ -113,25 +116,49 @@ export class UsersComponent implements OnInit {
         this.submitted = false;
     }
 
+
     saveUser() {
         this.submitted = true;
 
-        // if (this.user.login.trim()) {
-        //     if (this.user.id) {
-        //         this.users[this.findIndexById(this.user.id)] = this.user;
-        //         this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Updated', life: 3000});
-        //     }
-        //     else {
-        //         this.user.id = this.createId();
-        //         this.user.image = 'user-placeholder.svg';
-        //         this.users.push(this.user);
-        //         this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Created', life: 3000});
-        //     }
+        if (this.user.login.trim()) {
+            if (this.user.id) {
+                this.users[this.findIndexById(String(this.user.id))] = this.user;
+                this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Updated', life: 3000});
+            }
+            else {
+                //this.user.id = this.createId();
+                this.usersService.createUser(this.user)
+                  .pipe(
+                    catchError((error: HttpErrorResponse)=>{
+                      console.log(error)
+                      if (error.status === 0) {
+                        this.messageService.add({severity:'error', summary: 'An error occurred:', detail: error.error, life: 7000});
+                      } else if(error.error) {
+                        this.messageService.add({severity:'error', summary: error.error.statusCode+' : '+error.error.error, detail:error.error.message , life: 7000});
+                      } else {
+                        this.messageService.add({severity:'error', summary: `Backend returned code ${error.status}, body was: `, detail: error.error, life: 7000});
+                      }
+                      return throwError(() => new Error('Something bad happened; please try again later.'));
+                    })
+                  )
+                  .subscribe(res=>{
+                    console.log(res)
+                    let createdUser = new User;
+                    createdUser.login = res.login
+                    createdUser.firstName = res.firstName
+                    createdUser.secondName = res.secondName
+                    createdUser.thirdName = res.thirdName
+                    createdUser.isActive = res.isActive
+                
+                    this.users.push(createdUser);
+                    this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Created', life: 3000});
+                  })
+            }
 
-        //     this.users = [...this.users];
-        //     this.userDialog = false;
-        //     this.user = {};
-        // }
+            this.users = [...this.users];
+            this.userDialog = false;
+            this.user = new User;
+        }
     }
 
     findIndexById(id: string): number {
