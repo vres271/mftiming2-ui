@@ -1,11 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
-import { ChangeDetectorRef, Component, OnChanges, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UsersService, User } from './../../services/users.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 
 @Component({
