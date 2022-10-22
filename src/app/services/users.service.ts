@@ -1,29 +1,108 @@
-import { User } from './../components/users/users.component';
+import { map, tap } from 'rxjs/operators';
 import { APIService } from './api.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+
+export class User {
+  id: number
+  login: string
+  firstName: string
+  secondName: string
+  thirdName: string
+  isActive: boolean  
+  constructor(item?:any) {
+    if(item) {
+      this.id = item.id
+      this.login = item.login
+      if(item.firstName!==undefined) this.firstName = item.firstName
+      if(item.secondName!==undefined) this.secondName = item.secondName
+      if(item.thirdName!==undefined) this.thirdName = item.thirdName
+      if(item.isActive!==undefined) this.isActive = item.isActive
+    }
+  }
+}
+
+export class UserDTO {
+  login: string
+  firstName: string = ''
+  secondName: string = ''
+  thirdName: string = ''
+  isActive: boolean  = false; 
+  constructor(item?:User) {
+    if(item) {
+      this.login = item.login
+      if(item.firstName!==undefined) this.firstName = item.firstName
+      if(item.secondName!==undefined) this.secondName = item.secondName
+      if(item.thirdName!==undefined) this.thirdName = item.thirdName
+      if(item.isActive!==undefined) this.isActive = item.isActive
+    }
+  }
+}
+
+export class CreateUserDto  extends UserDTO{}
+export class UpdateUserDto extends CreateUserDto {}
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
   private entityName = 'users'
+  items:User[] = []
   constructor(private apiService: APIService) { }
 
   getUsers():Observable<User[]> {
+    if(this.items.length) return of(this.items)
     return this.apiService.get(this.entityName)
+      .pipe(
+        map((items:User[])=>{
+          this.items = items
+          return this.items
+        })
+      )
   }
 
   createUser(newUser:User):Observable<User> {
-    return this.apiService.post(this.entityName, newUser)
+    return this.apiService.post(this.entityName, new CreateUserDto(newUser))
+      .pipe(
+        tap(res=>{
+          const createdUser = new User(res);
+          this.items.push(createdUser);
+        })
+      )
   }
 
   deleteUser(userId:number):Observable<User> {
     return this.apiService.delete(this.entityName, userId)
+      .pipe(
+        tap(res=>{
+          this.items = this.items.filter(item => item.id !== userId);          
+        })
+      )
   }
 
-  updateUser(updatingUser:User):Observable<User> {
-    return this.apiService.patch(this.entityName, updatingUser.id, updatingUser)
+  updateUser(updatingUser:User, userId:number):Observable<User> {
+    return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
+      .pipe(
+        tap(_=>{
+          this.items[this.findIndexById(String(userId))] = updatingUser;
+        })
+      )
+    
   }
+
+
+  findIndexById(id: string): number {
+    let index = -1;
+    for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].id === +id) {
+            index = i;
+            break;
+        }
+    }
+    return index;
+}
+
+
 
 }

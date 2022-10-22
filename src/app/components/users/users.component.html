@@ -23,7 +23,7 @@
     </p-toolbar>
 
     <p-table #dt 
-        [value]="users" 
+        [value]="usersService.items" 
         [rows]="10" 
         [paginator]="true" 
         [globalFilterFields]="['login','firstName','secondName','thirdName']" 
