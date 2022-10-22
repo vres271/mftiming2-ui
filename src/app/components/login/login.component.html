@@ -1,0 +1,13 @@
+
+    <p-card header="Login" [style]="{'width': '25rem',  'margin': 'auto'}">
+        <ng-template pTemplate="header"></ng-template>
+        <div class=" mb-4">
+            <input type="text" pInputText  placeholder="Login" [(ngModel)]="login"/>
+        </div>
+        <div>
+            <p-password [(ngModel)]="password"  placeholder="Password" [feedback]="false"></p-password>
+        </div>
+        <ng-template pTemplate="footer">
+            <button pButton type="button" label="Sign In" (click)="signIn()"></button>
+        </ng-template>        
+    </p-card>

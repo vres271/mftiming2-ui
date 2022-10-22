@@ -27,17 +27,19 @@ import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import {MenubarModule} from 'primeng/menubar';
 import {InputSwitchModule} from 'primeng/inputswitch';
-
-
+import {PasswordModule} from 'primeng/password';
+import {CardModule} from 'primeng/card';
 
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UsersComponent
+    UsersComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -67,6 +69,8 @@ import { UsersComponent } from './components/users/users.component';
     InputTextareaModule,    
     MenubarModule,
     InputSwitchModule,
+    PasswordModule,
+    CardModule,
    ],
   providers: [],
   bootstrap: [AppComponent]
