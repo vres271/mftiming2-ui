@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(private apiService:APIService) { }
 
-  login(authData:{login:string,password:string}):Observable<any> {
-    return this.apiService.post('login/auth',authData)
+  login(authData:{username:string,password:string}):Observable<any> {
+    return this.apiService.post('auth/login',authData)
   }
 }

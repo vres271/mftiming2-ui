@@ -6,6 +6,7 @@ import { Observable, of } from 'rxjs';
 export class User {
   id: number
   login: string
+  password: string
   firstName: string
   secondName: string
   thirdName: string
@@ -14,6 +15,7 @@ export class User {
     if(item) {
       this.id = item.id
       this.login = item.login
+      if(item.password!==undefined) this.password = item.password
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
@@ -24,6 +26,7 @@ export class User {
 
 export class UserDTO {
   login: string
+  password: string = ''
   firstName: string = ''
   secondName: string = ''
   thirdName: string = ''
@@ -31,6 +34,7 @@ export class UserDTO {
   constructor(item?:User) {
     if(item) {
       this.login = item.login
+      if(item.password!==undefined) this.password = item.password
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
@@ -60,6 +64,10 @@ export class UsersService {
           return this.items
         })
       )
+  }
+
+  getUser():Observable<User> {
+    return this.apiService.get(this.entityName+'/8')
   }
 
   createUser(newUser:User):Observable<User> {

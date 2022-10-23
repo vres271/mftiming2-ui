@@ -1,15 +1,4 @@
-<!-- <table>
-    <tr *ngFor="let item of items|async">
-        <td>{{item.login}}</td>
-        <td>{{item.firstName}}</td>
-        <td>{{item.secondName}}</td>
-        <td>{{item.thirdName}}</td>
-        <td>{{item.isActive}}</td>
-    </tr>
-</table> -->
-
 <p-toast></p-toast>
-
 <div class="card ">
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -50,6 +39,7 @@
                 <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
                 <th style="width: 3rem"></th>
                 <th pSortableColumn="login">Login <p-sortIcon field="login"></p-sortIcon></th>
+                <th pSortableColumn="password">password <p-sortIcon field="password"></p-sortIcon></th>
                 <th pSortableColumn="firstName">firstName <p-sortIcon field="firstName"></p-sortIcon></th>
                 <th pSortableColumn="secondName">secondName <p-sortIcon field="secondName"></p-sortIcon></th>
                 <th pSortableColumn="thirdName">thirdName <p-sortIcon field="thirdName"></p-sortIcon></th>
@@ -62,6 +52,7 @@
                 <td><p-tableCheckbox [value]="user"></p-tableCheckbox></td>
                 <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="editUser(user)"></button></td>
                 <td>{{user.login}}</td>
+                <td>{{user.password}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
@@ -83,6 +74,10 @@
             <label for="login">login</label>
             <input type="text" pInputText id="login" [(ngModel)]="user.login" required autofocus />
             <small class="p-error" *ngIf="submitted && !user.login">Name is required.</small>
+        </div>
+        <div class="field">
+            <label for="password">password</label>
+            <input type="text" pInputText id="password" [(ngModel)]="user.password" required  />
         </div>
         <div class="field">
             <label for="firstName">firstName</label>
