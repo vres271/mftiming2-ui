@@ -49,6 +49,11 @@ export class UsersComponent implements OnInit  {
         this.userDialog = true;
     }
 
+    refreshUsers() {
+      this.usersService.getUsers({force:true})
+        .subscribe();
+    }
+
     deleteSelectedUsers() {
         this.confirmationService.confirm({
             message: 'Are you sure you want to delete the selected users?',

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -15,11 +15,21 @@ export type affectedResponse = {
 })
 export class APIService {
   private apiURL = 'http://localhost:3003/';
+  public access_token:string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   get(entityName:string):Observable<any> {
-    return this.http.get(this.apiURL+entityName)
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    };
+    if(this.access_token) {
+      httpOptions.headers = httpOptions.headers.set('Authorization', 'Bearer '+this.access_token);
+    }
+    return this.http.get(this.apiURL+entityName, httpOptions)
       .pipe(
         catchError(this.handleError)
       )

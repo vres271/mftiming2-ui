@@ -55,8 +55,8 @@ export class UsersService {
   items:User[] = []
   constructor(private apiService: APIService) { }
 
-  getUsers():Observable<User[]> {
-    if(this.items.length) return of(this.items)
+  getUsers(params?:{force?:boolean}):Observable<User[]> {
+    if(this.items.length && !params?.force) return of(this.items)
     return this.apiService.get(this.entityName)
       .pipe(
         map((items:User[])=>{

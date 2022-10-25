@@ -3,7 +3,8 @@
     <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
             <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple [label]="'Delete'" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+            <button pButton pRipple [label]="'Delete'" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+            <button pButton pRipple [label]="'Refresh'" icon="pi pi-refresh" class="p-button-default" (click)="refreshUsers()"  ></button>
         </ng-template>
 
         <ng-template pTemplate="right">
