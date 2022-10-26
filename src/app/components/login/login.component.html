@@ -1,5 +1,9 @@
-
-    <p-card header="Login" [style]="{'width': '25rem',  'margin': 'auto'}">
+    <p-messages *ngIf="authService.isAuth"  severity="info">
+        <ng-template pTemplate>
+            <div class="ml-2">User authorized</div>
+        </ng-template>
+    </p-messages>
+    <p-card *ngIf="!authService.isAuth" header="Login" [style]="{'width': '25rem',  'margin': 'auto'}">
         <ng-template pTemplate="header"></ng-template>
         <div class=" mb-4">
             <input type="text" pInputText  placeholder="Login" [(ngModel)]="login"/>
@@ -11,3 +15,4 @@
             <button pButton type="button" label="Sign In" (click)="signIn()"></button>
         </ng-template>        
     </p-card>
+

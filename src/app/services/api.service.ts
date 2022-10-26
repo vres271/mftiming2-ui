@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParamsOptions } from '@angular/common/http';
 
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
@@ -15,42 +15,43 @@ export type affectedResponse = {
 })
 export class APIService {
   private apiURL = 'http://localhost:3003/';
-  public access_token:string;
+  private access_token:string;
+  private httpOptions = {
+    headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+    })
+  };
 
   constructor(private http: HttpClient) {}
 
-  get(entityName:string):Observable<any> {
+  setAccessToken(access_token:string) {
+    this.access_token = access_token;
+    this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+this.access_token);
+  }
 
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Content-Type':  'application/json',
-      })
-    };
-    if(this.access_token) {
-      httpOptions.headers = httpOptions.headers.set('Authorization', 'Bearer '+this.access_token);
-    }
-    return this.http.get(this.apiURL+entityName, httpOptions)
+  get(entityName:string):Observable<any> {
+    return this.http.get(this.apiURL+entityName, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   post(entityName:string, data:any):Observable<any> {
-    return this.http.post(this.apiURL+entityName, data)
+    return this.http.post(this.apiURL+entityName, data, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   delete(entityName:string, id:number):Observable<any> {
-    return this.http.delete(`${this.apiURL}${entityName}/${id}`)
+    return this.http.delete(`${this.apiURL}${entityName}/${id}`, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
   }
 
   patch(entityName:string, id:number, data:any):Observable<any> {
-    return this.http.patch(`${this.apiURL}${entityName}/${id}`, data)
+    return this.http.patch(`${this.apiURL}${entityName}/${id}`, data, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )

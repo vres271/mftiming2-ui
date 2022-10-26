@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 })
 export class AuthService {
   private access_token:string
+  public isAuth: boolean = false
 
   constructor(private apiService:APIService) { }
 
@@ -16,7 +17,8 @@ export class AuthService {
       .pipe(tap((res:any)=>{
         if(res.access_token) {
           this.access_token = res.access_token;
-          this.apiService.access_token = this.access_token
+          this.isAuth = true;
+          this.apiService.setAccessToken(this.access_token)
         }
       }))
   }
