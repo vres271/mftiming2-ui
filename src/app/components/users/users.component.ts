@@ -51,6 +51,9 @@ export class UsersComponent implements OnInit  {
 
     refreshUsers() {
       this.usersService.getUsers({force:true})
+        .pipe(
+          catchError(this.errorHandler)
+        )
         .subscribe();
     }
 

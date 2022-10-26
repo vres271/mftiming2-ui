@@ -16,7 +16,7 @@ export class AuthService {
       .pipe(tap((res:any)=>{
         if(res.access_token) {
           this.access_token = res.access_token;
-          this.apiService.access_token = this.access_token;
+          this.apiService.access_token = this.access_token
         }
       }))
   }
