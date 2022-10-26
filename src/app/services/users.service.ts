@@ -10,6 +10,7 @@ export class User {
   firstName: string
   secondName: string
   thirdName: string
+  _roles: string
   isActive: boolean  
   constructor(item?:any) {
     if(item) {
@@ -19,6 +20,7 @@ export class User {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
+      if(item._roles!==undefined) this._roles = item._roles
       if(item.isActive!==undefined) this.isActive = item.isActive
     }
   }
@@ -30,6 +32,7 @@ export class UserDTO {
   firstName: string = ''
   secondName: string = ''
   thirdName: string = ''
+  _roles: string = ''
   isActive: boolean  = false; 
   constructor(item?:User) {
     if(item) {
@@ -38,6 +41,7 @@ export class UserDTO {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
+      if(item._roles!==undefined) this._roles = item._roles
       if(item.isActive!==undefined) this.isActive = item.isActive
     }
   }

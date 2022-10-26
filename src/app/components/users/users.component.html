@@ -44,6 +44,7 @@
                 <th pSortableColumn="firstName">firstName <p-sortIcon field="firstName"></p-sortIcon></th>
                 <th pSortableColumn="secondName">secondName <p-sortIcon field="secondName"></p-sortIcon></th>
                 <th pSortableColumn="thirdName">thirdName <p-sortIcon field="thirdName"></p-sortIcon></th>
+                <th pSortableColumn="_roles">_roles <p-sortIcon field="_roles"></p-sortIcon></th>
                 <th pSortableColumn="isActive">isActive <p-sortIcon field="isActive"></p-sortIcon></th>
                 <th style="width: 3rem"></th>
             </tr>
@@ -57,6 +58,7 @@
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
+                <td>{{user._roles}}</td>
                 <td>{{user.isActive}}</td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteUser(user)"></button></td>
             </tr>
@@ -91,6 +93,10 @@
         <div class="field">
             <label for="thirdName">thirdName</label>
             <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
+        </div>
+        <div class="field">
+            <label for="_roles">_roles</label>
+            <input type="text" pInputText id="_roles" [(ngModel)]="user._roles" required  />
         </div>
         <div class="field">
             <div><label for="isActive">isActive</label></div>
