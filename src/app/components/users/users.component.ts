@@ -23,8 +23,7 @@ export class UsersComponent implements OnInit  {
     user: User;
     dialogData: {
         roles:string[],
-        birthDate: Date,
-    } = {roles:[],birthDate: new Date()}
+    } = {roles:[]}
     selectedUsers: User[];
     userDialog: boolean;
     submitted: boolean;
@@ -55,13 +54,11 @@ export class UsersComponent implements OnInit  {
         this.userDialog = false;
         this.submitted = false;
         this.dialogData.roles = [];
-        this.dialogData.birthDate = new Date;
     }
 
     editUser(user: User) {
         this.user = {...user};
         this.dialogData.roles = this.user.roles.split(',').filter(role=>role)
-        this.dialogData.birthDate = new Date(this.user.birthDate)
         this.userDialog = true;
     }
 
@@ -108,7 +105,6 @@ export class UsersComponent implements OnInit  {
         this.submitted = true;
         if (this.user.login.trim()) {
             this.user.roles = this.dialogData.roles.join(',')
-            this.user.birthDate = this.dialogData.birthDate
             if (this.user.id) {
                 this.usersService.updateUser(this.user, this.user.id)
                     .pipe(
@@ -130,7 +126,6 @@ export class UsersComponent implements OnInit  {
             }
             this.userDialog = false;
             this.dialogData.roles = [];
-            this.dialogData.birthDate = new Date()
         }
     }
 

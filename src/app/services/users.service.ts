@@ -23,7 +23,14 @@ export class User {
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
       if(item.roles!==undefined) this.roles = item.roles
       if(item.isActive!==undefined) this.isActive = item.isActive
-      if(item.birthDate!==undefined) this.birthDate = item.birthDate
+      if(item.birthDate!==undefined) {
+        if(typeof item.birthDate === 'string') {
+          this.birthDate = new Date(item.birthDate+'T00:00:00.000')
+        } else {
+          this.birthDate = item.birthDate
+        }
+        
+      }
     }
   }
 }
@@ -36,7 +43,7 @@ export class UserDTO {
   thirdName: string = ''
   roles: string = ''
   isActive: boolean  = false; 
-  birthDate: Date  
+  birthDate: string  
   constructor(item?:User) {
     if(item) {
       this.login = item.login
@@ -46,7 +53,10 @@ export class UserDTO {
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
       if(item.roles!==undefined) this.roles = item.roles
       if(item.isActive!==undefined) this.isActive = item.isActive
-      if(item.birthDate!==undefined) this.birthDate = item.birthDate
+      if(item.birthDate!==undefined) {
+        let dateArray = item.birthDate.toLocaleString().split(',')[0].split('.')
+        this.birthDate = dateArray[2]+'-'+dateArray[1]+'-'+dateArray[0]
+      }
     }
   }
 }
@@ -68,7 +78,7 @@ export class UsersService {
     return this.apiService.get(this.entityName)
       .pipe(
         map((items:User[])=>{
-          this.items = items
+          this.items = items.map(item=>new User(item))
           return this.items
         })
       )

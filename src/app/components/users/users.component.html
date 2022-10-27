@@ -52,7 +52,7 @@
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
                 <td>{{user.roles}}</td>
-                <td>{{user.birthDate}}</td>
+                <td>{{user.birthDate | date: 'dd.MM.yyyy'}}</td>
                 <td>{{user.isActive}}</td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteUser(user)"></button></td>
             </tr>
@@ -98,7 +98,7 @@
                 </div>
                 <div class="field">
                     <label for="birthDate">birthDate</label>
-                    <p-calendar [(ngModel)]="dialogData.birthDate"></p-calendar>
+                    <p-calendar [(ngModel)]="user.birthDate"  dateFormat="dd.mm.yy"></p-calendar>
                 </div>
                 <div class="field">
                     <div><label for="isActive">isActive</label></div>
