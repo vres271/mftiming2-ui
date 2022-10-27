@@ -1,6 +1,13 @@
     <p-messages *ngIf="authService.isAuth"  severity="info">
         <ng-template pTemplate>
-            <div class="ml-2">User authorized</div>
+            <div class="ml-2">User authorized: </div>
+            <div class="ml-2">
+                {{authService.user?.login}} | 
+                {{authService.user?.roles}} | 
+                {{authService.user?.firstName}}
+                {{authService.user?.secondName}}
+                {{authService.user?.thirdName}}
+            </div>
         </ng-template>
     </p-messages>
     <p-card *ngIf="!authService.isAuth" header="Login" [style]="{'width': '25rem',  'margin': 'auto'}">

@@ -1,2 +1,5 @@
-<div class="mb-4"><p-menubar [model]="menuItems"></p-menubar></div>
+<div class="mb-4"><p-menubar [model]="menuItems">
+    <button *ngIf="authService.user" pButton [label]="authService.user.login" class="p-button-text" ></button>
+    <button *ngIf="authService.isAuth" (click)="logOut()" pButton label="Logout" class="p-button-text" icon="pi pi-power-off"></button>
+</p-menubar></div>
 <router-outlet></router-outlet>

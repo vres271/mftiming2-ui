@@ -1,17 +1,5 @@
 <p-toast></p-toast>
 <div class="card ">
-    <p-toolbar styleClass="mb-4">
-        <ng-template pTemplate="left">
-            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple [label]="'Delete'" icon="pi pi-trash" class="p-button-danger mr-2" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
-            <button pButton pRipple [label]="'Refresh'" icon="pi pi-refresh" class="p-button-default" (click)="refreshUsers()"  ></button>
-        </ng-template>
-
-        <ng-template pTemplate="right">
-            <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
-        </ng-template>
-    </p-toolbar>
-
     <p-table #dt 
         [value]="usersService.items" 
         [rows]="10" 
@@ -28,7 +16,11 @@
         >
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
-                <h5 class="m-0">Manage Users</h5>
+                <span class="m-0">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 p-button-outlined" (click)="openNew()"></button>
+                    <button pButton pRipple [label]="'Delete'" icon="pi pi-trash" class="p-button-danger mr-2 p-button-outlined" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
+                    <button pButton pRipple [label]="'Refresh'" icon="pi pi-refresh" class="p-button-default p-button-outlined" (click)="refreshUsers()"  ></button>
+                </span>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
                     <input pInputText type="text" #filterInput (input)="dt.filterGlobal(filterInput.value, 'contains')" placeholder="Search..." />
@@ -44,7 +36,8 @@
                 <th pSortableColumn="firstName">firstName <p-sortIcon field="firstName"></p-sortIcon></th>
                 <th pSortableColumn="secondName">secondName <p-sortIcon field="secondName"></p-sortIcon></th>
                 <th pSortableColumn="thirdName">thirdName <p-sortIcon field="thirdName"></p-sortIcon></th>
-                <th pSortableColumn="_roles">_roles <p-sortIcon field="_roles"></p-sortIcon></th>
+                <th pSortableColumn="roles">roles <p-sortIcon field="roles"></p-sortIcon></th>
+                <th pSortableColumn="birthDate">birthDate <p-sortIcon field="birthDate"></p-sortIcon></th>
                 <th pSortableColumn="isActive">isActive <p-sortIcon field="isActive"></p-sortIcon></th>
                 <th style="width: 3rem"></th>
             </tr>
@@ -58,7 +51,8 @@
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
-                <td>{{user._roles}}</td>
+                <td>{{user.roles}}</td>
+                <td>{{user.birthDate}}</td>
                 <td>{{user.isActive}}</td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteUser(user)"></button></td>
             </tr>
@@ -71,38 +65,47 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="User Details" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="userDialog" [style]="{width: '850px'}" header="User Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="field">
-            <label for="login">login</label>
-            <input type="text" pInputText id="login" [(ngModel)]="user.login" required autofocus />
-            <small class="p-error" *ngIf="submitted && !user.login">Name is required.</small>
+        <div class="formgrid grid">
+            <div class="field col">
+                <div class="field">
+                    <label for="login">login</label>
+                    <input type="text" pInputText id="login" [(ngModel)]="user.login" required autofocus />
+                    <small class="p-error" *ngIf="submitted && !user.login">Name is required.</small>
+                </div>
+                <div class="field">
+                    <label for="password">password</label>
+                    <input type="text" pInputText id="password" [(ngModel)]="user.password" required  />
+                </div>
+                <div class="field">
+                    <label for="firstName">firstName</label>
+                    <input type="text" pInputText id="firstName" [(ngModel)]="user.firstName" required  />
+                </div>
+                <div class="field">
+                    <label for="secondName">secondName</label>
+                    <input type="text" pInputText id="secondName" [(ngModel)]="user.secondName" required  />
+                </div>
+                <div class="field">
+                    <label for="thirdName">thirdName</label>
+                    <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
+                </div>
+            </div>
+            <div class="field col">
+                <div class="field">
+                    <label for="roles">roles</label>
+                    <p-multiSelect [options]="roles" [(ngModel)]="dialogData.roles" optionLabel="name" optionValue="code"></p-multiSelect>
+                </div>
+                <div class="field">
+                    <label for="birthDate">birthDate {{user.birthDate}}</label>
+                    <p-calendar [(ngModel)]="user.birthDate"></p-calendar>
+                </div>
+                <div class="field">
+                    <div><label for="isActive">isActive</label></div>
+                    <p-inputSwitch [(ngModel)]="user.isActive" id="isActive"></p-inputSwitch>
+                </div>
+            </div>
         </div>
-        <div class="field">
-            <label for="password">password</label>
-            <input type="text" pInputText id="password" [(ngModel)]="user.password" required  />
-        </div>
-        <div class="field">
-            <label for="firstName">firstName</label>
-            <input type="text" pInputText id="firstName" [(ngModel)]="user.firstName" required  />
-        </div>
-        <div class="field">
-            <label for="secondName">secondName</label>
-            <input type="text" pInputText id="secondName" [(ngModel)]="user.secondName" required  />
-        </div>
-        <div class="field">
-            <label for="thirdName">thirdName</label>
-            <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
-        </div>
-        <div class="field">
-            <label for="_roles">_roles</label>
-            <input type="text" pInputText id="_roles" [(ngModel)]="user._roles" required  />
-        </div>
-        <div class="field">
-            <div><label for="isActive">isActive</label></div>
-            <p-inputSwitch [(ngModel)]="user.isActive" id="isActive"></p-inputSwitch>
-        </div>
-
     </ng-template>
 
     <ng-template pTemplate="footer">

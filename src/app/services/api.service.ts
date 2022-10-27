@@ -43,8 +43,8 @@ export class APIService {
       )
   }
 
-  delete(entityName:string, id:number):Observable<any> {
-    return this.http.delete(`${this.apiURL}${entityName}/${id}`, this.httpOptions)
+  delete(entityName:string, id?:number):Observable<any> {
+    return this.http.delete(`${this.apiURL}${entityName}${id?('/'+id):''}`, this.httpOptions)
       .pipe(
         catchError(this.handleError)
       )
@@ -59,9 +59,9 @@ export class APIService {
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      console.error('An error occurred:', error.error);
+      console.log('An error occurred:', error.error);
     } else {
-      console.error(
+      console.log(
         `Backend returned code ${error.status}, body was: `, error.error);
     }
     return throwError(error);
