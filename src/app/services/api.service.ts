@@ -29,6 +29,11 @@ export class APIService {
     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', 'Bearer '+this.access_token);
   }
 
+  clearAccessToken() {
+    this.access_token = '';
+    this.httpOptions.headers = new HttpHeaders({'Content-Type':  'application/json'})
+  }
+
   get(entityName:string):Observable<any> {
     return this.http.get(this.apiURL+entityName, this.httpOptions)
       .pipe(

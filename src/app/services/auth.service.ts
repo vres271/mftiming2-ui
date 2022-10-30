@@ -1,27 +1,67 @@
+import { Router } from '@angular/router';
 import { tap } from 'rxjs/operators';
 import { APIService } from './api.service';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { User } from './users.service';
 
+export class authDTO {
+  auth?:boolean
+  access_token?:string
+  user:User
+} 
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private access_token:string
   public isAuth: boolean = false
   public user: User|null = null;
 
-  constructor(private apiService:APIService) { }
+  constructor(
+    private apiService:APIService,
+    private router: Router,
+  ) {
+    const savedAccessToken = sessionStorage.getItem('access_token')
+    if(savedAccessToken) {
+      this.apiService.setAccessToken(savedAccessToken)
+      this.auth()
+        .subscribe()
+    }
+  }
+
+  private setAuth(authItem:authDTO):boolean {
+    this.isAuth = authItem.auth||authItem.access_token!==''
+    this.user = new User(authItem.user)
+    if(authItem.access_token) this.apiService.setAccessToken(authItem.access_token)
+    return this.isAuth
+  }
+
+  private unsetAuth():boolean {
+    this.isAuth = false
+    this.user = null
+    this.apiService.clearAccessToken()
+    return !this.isAuth
+  }
+
+  auth():Observable<any> {
+    return this.apiService.get('auth/me')
+      .pipe(tap((res:authDTO)=>{
+        if(res.auth && res.user) {
+          this.setAuth(res)
+        } else {
+          this.unsetAuth()
+          sessionStorage.removeItem('access_token')
+        }
+      }))
+  }
 
   login(authData:{username:string,password:string}):Observable<any> {
     return this.apiService.post('auth/login',authData)
-      .pipe(tap((res:any)=>{
+      .pipe(tap((res:authDTO)=>{
         if(res.access_token) {
-          this.access_token = res.access_token;
-          this.isAuth = true;
-          this.user = new User(res.user)
-          this.apiService.setAccessToken(this.access_token)
+          this.setAuth(res)
+          sessionStorage.setItem('access_token',res.access_token)
         }
       }))
   }
@@ -29,10 +69,9 @@ export class AuthService {
   logOut() {
     return this.apiService.post('auth/logout',{})
       .pipe(tap(()=>{
-          this.access_token = ''
-          this.isAuth = false
-          this.user = null
-          this.apiService.setAccessToken('')
+          this.unsetAuth()
+          sessionStorage.removeItem('access_token')
+          this.router.navigate(['/' ]);
       }))
   }
 
