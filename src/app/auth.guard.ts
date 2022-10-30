@@ -1,3 +1,5 @@
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { Inject, Injectable } from "@angular/core"
 import { ActivatedRouteSnapshot, CanActivate, CanActivateChild, RouterStateSnapshot } from "@angular/router"
@@ -12,14 +14,14 @@ export class AuthGuard
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
-    return this.authService.isAuth
+  ): Observable<boolean> {
+    return this.authService.getIsAut()
   }
 
   canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
-  ): boolean {
+  ): Observable<boolean> {
     return this.canActivate(next, state)
   }
 }

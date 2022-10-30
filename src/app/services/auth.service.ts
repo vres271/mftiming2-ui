@@ -1,7 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { APIService } from './api.service';
-import { Observable } from 'rxjs';
+import { Observable, of, BehaviorSubject, ReplaySubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { User } from './users.service';
 
@@ -15,8 +16,9 @@ export class authDTO {
   providedIn: 'root'
 })
 export class AuthService {
-  public isAuth: boolean = false
+  public isAuth: boolean|null = null
   public user: User|null = null;
+  public authSubj:ReplaySubject<boolean> = new ReplaySubject()
 
   constructor(
     private apiService:APIService,
@@ -26,8 +28,15 @@ export class AuthService {
     if(savedAccessToken) {
       this.apiService.setAccessToken(savedAccessToken)
       this.auth()
-        .subscribe()
+        .pipe(catchError((error: HttpErrorResponse)=>of(null)))
+        .subscribe(res=>{
+          this.authSubj.next(!!res?.auth)
+        })
     }
+  }
+
+  getIsAut() {
+    return this.isAuth===null?this.authSubj:of(this.isAuth)
   }
 
   private setAuth(authItem:authDTO):boolean {
@@ -46,7 +55,8 @@ export class AuthService {
 
   auth():Observable<any> {
     return this.apiService.get('auth/me')
-      .pipe(tap((res:authDTO)=>{
+      .pipe(
+        tap((res:authDTO)=>{
         if(res.auth && res.user) {
           this.setAuth(res)
         } else {
