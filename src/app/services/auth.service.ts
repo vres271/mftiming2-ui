@@ -57,6 +57,7 @@ export class AuthService {
   }
 
   login(authData:{username:string,password:string}):Observable<any> {
+    this.unsetAuth()
     return this.apiService.post('auth/login',authData)
       .pipe(tap((res:authDTO)=>{
         if(res.access_token) {

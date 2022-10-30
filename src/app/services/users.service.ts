@@ -6,18 +6,18 @@ import { Observable, of } from 'rxjs';
 export class User {
   id: number
   login: string
-  password: string
+  password?: string
   firstName: string
   secondName: string
   thirdName: string
   roles: string
   isActive: boolean  
-  birthDate: Date  
+  birthDate: Date|null
   constructor(item?:any) {
     if(item) {
       this.id = item.id
       this.login = item.login
-      if(item.password!==undefined) this.password = item.password
+      if(item.password) this.password = item.password
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
@@ -37,25 +37,27 @@ export class User {
 
 export class UserDTO {
   login: string
-  password: string = ''
+  password?: string
   firstName: string = ''
   secondName: string = ''
   thirdName: string = ''
   roles: string = ''
   isActive: boolean  = false; 
-  birthDate: string  
+  birthDate: string|null
   constructor(item?:User) {
     if(item) {
       this.login = item.login
-      if(item.password!==undefined) this.password = item.password
+      if(item.password) this.password = item.password
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
       if(item.roles!==undefined) this.roles = item.roles
       if(item.isActive!==undefined) this.isActive = item.isActive
-      if(item.birthDate!==undefined) {
+      if(item.birthDate) {
         let dateArray = item.birthDate.toLocaleString().split(',')[0].split('.')
         this.birthDate = dateArray[2]+'-'+dateArray[1]+'-'+dateArray[0]
+      } else {
+        this.birthDate = item.birthDate
       }
     }
   }
@@ -93,6 +95,7 @@ export class UsersService {
       .pipe(
         tap(res=>{
           const createdUser = new User(res);
+          if(createdUser.password) delete createdUser.password;
           this.items.push(createdUser);
         })
       )
@@ -111,6 +114,7 @@ export class UsersService {
     return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
       .pipe(
         tap(_=>{
+          if(updatingUser.password) delete updatingUser.password;
           this.items[this.findIndexById(String(userId))] = updatingUser;
         })
       )

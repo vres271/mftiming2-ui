@@ -23,7 +23,8 @@ export class UsersComponent implements OnInit  {
     user: User;
     dialogData: {
         roles:string[],
-    } = {roles:[]}
+        passwordConfirmation:string,
+    } = {roles:[],passwordConfirmation:''}
     selectedUsers: User[];
     userDialog: boolean;
     submitted: boolean;
@@ -76,7 +77,6 @@ export class UsersComponent implements OnInit  {
             header: 'Confirm',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                
                 this.users = this.users.filter(val => !this.selectedUsers?.includes(val));
                 this.selectedUsers = [];
                 this.messageService.add({severity:'success', summary: 'Successful', detail: 'Users Deleted', life: 3000});
