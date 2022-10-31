@@ -35,13 +35,17 @@ import {CardModule} from 'primeng/card';
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
 import { LoginComponent } from './components/login/login.component';
+import { ItemDialogComponent } from './components/common/item-dialog/item-dialog.component';
+import { UsersDialogComponent } from './components/users/users-dialog/users-dialog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     UsersComponent,
-    LoginComponent
+    LoginComponent,
+    ItemDialogComponent,
+    UsersDialogComponent
   ],
   imports: [
     BrowserModule,

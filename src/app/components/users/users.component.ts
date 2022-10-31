@@ -1,16 +1,12 @@
+import { UsersDialogComponent } from './users-dialog/users-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild , } from '@angular/core';
 import { UsersService, User } from './../../services/users.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
-import { throwError, of } from 'rxjs';
+import {  of } from 'rxjs';
 
-interface Role {
-    name: string,
-    code: string
-}
 
 @Component({
     templateUrl: './users.component.html',
@@ -21,70 +17,30 @@ export class UsersComponent implements OnInit  {
     users: User[];
     userId: number|null = null;
     selectedUsers: User[];
-    userDialog: boolean;
-    roles: Role[] = [
-        {name:'Admin',code:'admin'},
-        {name:'User',code:'user'},
-    ];
-    itemsForm: FormGroup
-    defaults = {
-        login: '',
-        password: '',
-        firstName: '',
-        secondName: '',
-        thirdName: '',
-        roles: [],
-        birthDate: null,
-        isActive: '',
-    }
+    @ViewChild(UsersDialogComponent) 
+    private usersDialogComponent: UsersDialogComponent
+
     constructor(
         public usersService: UsersService, 
         private messageService: MessageService, 
         private confirmationService: ConfirmationService,
-        private fb: FormBuilder,
     ) {}
  
     ngOnInit() {
         this.usersService.getUsers()
             .subscribe(users=>this.users = users);
-        this.createForm()
     }
 
-    private createForm() {
-        this.itemsForm = this.fb.group({
-            login: [this.defaults.login, [Validators.required]],
-            password: [this.defaults.password],
-            firstName: [this.defaults.firstName, [Validators.required]],
-            secondName: [this.defaults.secondName],
-            thirdName: [this.defaults.thirdName],
-            roles: [this.defaults.roles],
-            birthDate: [this.defaults.birthDate],
-            isActive: [this.defaults.isActive],
-        });
+    openDialog(user?: User) {
+        this.userId = user?user.id:null
+        this.usersDialogComponent.openDialog(user)
     }
 
-    openNew() {
-        this.userId = null
-        this.itemsForm.reset(this.defaults)
-        this.itemsForm.get('password')?.setValidators([Validators.required])        
-        this.userDialog = true;
+    saveUser(user: User) { 
+        (!this.userId?this.usersService.createUser(user):this.usersService.updateUser(user, this.userId))
+            .pipe(catchError(this.errorHandler))
+            .subscribe(res=>this.successMessage(this.userId?'User Updated':'User Created'))
     }
-
-    editUser(user: User) {
-        this.userId = user.id
-        this.itemsForm.reset(this.defaults)
-        this.itemsForm.patchValue({
-            ...user, 
-            roles: user.roles.split(',').filter(role=>role),
-        });   
-        this.itemsForm.get('password')?.clearValidators()        
-        this.userDialog = true;
-    }
-
-    hideDialog() {
-        this.itemsForm.reset(this.defaults)
-        this.userDialog = false;
-   }
 
     refreshUsers() {
       this.usersService.getUsers({force:true})
@@ -102,7 +58,7 @@ export class UsersComponent implements OnInit  {
             accept: () => {
                 this.users = this.users.filter(val => !this.selectedUsers?.includes(val));
                 this.selectedUsers = [];
-                this.messageService.add({severity:'success', summary: 'Successful', detail: 'Users Deleted', life: 3000});
+                this.successMessage('Users Deleted')
             }
         });
     }
@@ -114,38 +70,15 @@ export class UsersComponent implements OnInit  {
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 this.usersService.deleteUser(user.id)
-                  .pipe(
-                    catchError(this.errorHandler)
-                  )
-                  .subscribe(res=>{
-                    if(res) this.messageService.add({severity:'success', summary: 'Successful', detail: 'User Deleted', life: 3000});
-                  })
+                  .pipe(catchError(this.errorHandler))
+                  .subscribe(res=>this.successMessage('User Deleted'))
             }
         });
     }
 
-    saveUser() {
 
-        const user = new User({ 
-            ...this.itemsForm.value, 
-            roles: this.itemsForm.value.roles.length?this.itemsForm.value.roles.join(','):'',
-        })
-
-        if(!this.userId) {
-            this.usersService.createUser(user)
-                .pipe(catchError(this.errorHandler))
-                .subscribe(res => {
-                    if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
-                })
-        } else {
-            this.usersService.updateUser(user, this.userId)
-                .pipe(catchError(this.errorHandler))
-                .subscribe(res => {
-                    if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
-                })             
-        }
-        this.userDialog = false;
-
+    private successMessage(detail:string) {
+        this.messageService.add({ severity: 'success', summary: 'Successful', detail, life: 3000 });
     }
 
     private errorHandler = (error: HttpErrorResponse)=>{

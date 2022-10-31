@@ -17,7 +17,7 @@
         <ng-template pTemplate="caption">
             <div class="flex align-items-center justify-content-between">
                 <span class="m-0">
-                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 p-button-outlined" (click)="openNew()"></button>
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2 p-button-outlined" (click)="openDialog()"></button>
                     <button pButton pRipple [label]="'Delete'" icon="pi pi-trash" class="p-button-danger mr-2 p-button-outlined" (click)="deleteSelectedUsers()" [disabled]="!selectedUsers || !selectedUsers.length"></button>
                     <button pButton pRipple [label]="'Refresh'" icon="pi pi-refresh" class="p-button-default p-button-outlined" (click)="refreshUsers()"  ></button>
                 </span>
@@ -44,7 +44,7 @@
         <ng-template pTemplate="body" let-user>
             <tr>
                 <td><p-tableCheckbox [value]="user"></p-tableCheckbox></td>
-                <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="editUser(user)"></button></td>
+                <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="openDialog(user)"></button></td>
                 <td>{{user.login}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
@@ -58,52 +58,6 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="userDialog" [style]="{width: '850px'}" header="User Details" [modal]="true" styleClass="p-fluid">
-    <ng-template pTemplate="content">
-        <div class="formgrid grid" [formGroup]="itemsForm">
-            <div class="field col">
-                <div class="field">
-                    <label for="login">login</label>
-                    <input type="text" pInputText id="login" formControlName="login"  autofocus />
-                </div>
-                <div class="field" >
-                    <label for="password">password</label>
-                    <p-password  formControlName="password" [toggleMask]="true"></p-password>                    
-                </div>
-                <div class="field">
-                    <label for="firstName">firstName</label>
-                    <input type="text" pInputText id="firstName" formControlName="firstName"   />
-                </div>
-                <div class="field">
-                    <label for="secondName">secondName</label>
-                    <input type="text" pInputText id="secondName" formControlName="secondName"   />
-                </div>
-                <div class="field">
-                    <label for="thirdName">thirdName</label>
-                    <input type="text" pInputText id="thirdName" formControlName="thirdName"   />
-                </div>
-            </div>
-            <div class="field col">
-                <div class="field">
-                    <label for="roles">roles</label>
-                    <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name" optionValue="code"></p-multiSelect>
-                </div>
-                <div class="field">
-                    <label for="birthDate">birthDate</label>
-                    <p-calendar formControlName="birthDate"  dateFormat="dd.mm.yy"></p-calendar>
-                </div>
-                <div class="field">
-                    <div><label for="isActive">isActive</label></div>
-                    <p-inputSwitch formControlName="isActive" id="isActive"></p-inputSwitch>
-                </div>
-            </div>
-        </div>
-    </ng-template>
-
-    <ng-template pTemplate="footer">
-        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" [disabled]="!itemsForm.valid" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
-    </ng-template>
-</p-dialog>
+<app-users-dialog (onItemSave)="saveUser($event)"></app-users-dialog>
 
 <p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

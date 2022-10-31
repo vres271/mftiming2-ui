@@ -66,6 +66,15 @@ export class UserDTO {
 export class CreateUserDto  extends UserDTO{}
 export class UpdateUserDto extends CreateUserDto {}
 
+interface Role {
+  name: string,
+  code: string
+}
+
+export const userRoles:Role[] = [
+  {name:'Admin',code:'admin'},
+  {name:'User',code:'user'},
+];
 
 @Injectable({
   providedIn: 'root'

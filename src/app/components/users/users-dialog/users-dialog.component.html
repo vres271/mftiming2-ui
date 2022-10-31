@@ -1,0 +1,47 @@
+<p-dialog [(visible)]="isOpened" [style]="{width: '850px'}" header="User Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="formgrid grid" [formGroup]="itemsForm">
+            <div class="field col">
+                <div class="field">
+                    <label for="login">login</label>
+                    <input type="text" pInputText id="login" formControlName="login"  autofocus />
+                </div>
+                <div class="field" >
+                    <label for="password">password</label>
+                    <p-password  formControlName="password" [toggleMask]="true"></p-password>                    
+                </div>
+                <div class="field">
+                    <label for="firstName">firstName</label>
+                    <input type="text" pInputText id="firstName" formControlName="firstName"   />
+                </div>
+                <div class="field">
+                    <label for="secondName">secondName</label>
+                    <input type="text" pInputText id="secondName" formControlName="secondName"   />
+                </div>
+                <div class="field">
+                    <label for="thirdName">thirdName</label>
+                    <input type="text" pInputText id="thirdName" formControlName="thirdName"   />
+                </div>
+            </div>
+            <div class="field col">
+                <div class="field">
+                    <label for="roles">roles</label>
+                    <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name" optionValue="code"></p-multiSelect>
+                </div>
+                <div class="field">
+                    <label for="birthDate">birthDate</label>
+                    <p-calendar formControlName="birthDate"  dateFormat="dd.mm.yy"></p-calendar>
+                </div>
+                <div class="field">
+                    <div><label for="isActive">isActive</label></div>
+                    <p-inputSwitch formControlName="isActive" id="isActive"></p-inputSwitch>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" [disabled]="!itemsForm.valid" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+    </ng-template>
+</p-dialog>
