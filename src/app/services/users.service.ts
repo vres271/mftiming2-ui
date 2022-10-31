@@ -114,6 +114,7 @@ export class UsersService {
     return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
       .pipe(
         tap(_=>{
+          updatingUser.id = userId
           if(updatingUser.password) delete updatingUser.password;
           this.items[this.findIndexById(String(userId))] = updatingUser;
         })

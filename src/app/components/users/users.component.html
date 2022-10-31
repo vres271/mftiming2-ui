@@ -67,42 +67,41 @@
 
 <p-dialog [(visible)]="userDialog" [style]="{width: '850px'}" header="User Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
-        <div class="formgrid grid">
+        <div class="formgrid grid" [formGroup]="itemsForm">
             <div class="field col">
                 <div class="field">
                     <label for="login">login</label>
-                    <input type="text" pInputText id="login" [(ngModel)]="user.login" required autofocus />
-                    <small class="p-error" *ngIf="submitted && !user.login">Name is required.</small>
+                    <input type="text" pInputText id="login" formControlName="login" required autofocus />
                 </div>
-                <div class="field">
+                <div class="field" >
                     <label for="password">password</label>
-                    <p-password [(ngModel)]="user.password" [toggleMask]="true"></p-password>                    
+                    <p-password  formControlName="password" [toggleMask]="true"></p-password>                    
                 </div>
                 <div class="field">
                     <label for="firstName">firstName</label>
-                    <input type="text" pInputText id="firstName" [(ngModel)]="user.firstName" required  />
+                    <input type="text" pInputText id="firstName" formControlName="firstName" required  />
                 </div>
                 <div class="field">
                     <label for="secondName">secondName</label>
-                    <input type="text" pInputText id="secondName" [(ngModel)]="user.secondName" required  />
+                    <input type="text" pInputText id="secondName" formControlName="secondName" required  />
                 </div>
                 <div class="field">
                     <label for="thirdName">thirdName</label>
-                    <input type="text" pInputText id="thirdName" [(ngModel)]="user.thirdName" required  />
+                    <input type="text" pInputText id="thirdName" formControlName="thirdName" required  />
                 </div>
             </div>
             <div class="field col">
                 <div class="field">
                     <label for="roles">roles</label>
-                    <p-multiSelect [options]="roles" [(ngModel)]="dialogData.roles" optionLabel="name" optionValue="code"></p-multiSelect>
+                    <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name" optionValue="code"></p-multiSelect>
                 </div>
                 <div class="field">
                     <label for="birthDate">birthDate</label>
-                    <p-calendar [(ngModel)]="user.birthDate"  dateFormat="dd.mm.yy"></p-calendar>
+                    <p-calendar formControlName="birthDate"  dateFormat="dd.mm.yy"></p-calendar>
                 </div>
                 <div class="field">
                     <div><label for="isActive">isActive</label></div>
-                    <p-inputSwitch [(ngModel)]="user.isActive" id="isActive"></p-inputSwitch>
+                    <p-inputSwitch formControlName="isActive" id="isActive"></p-inputSwitch>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { UsersService, User } from './../../services/users.service';
 import { ConfirmationService } from 'primeng/api';
@@ -18,48 +18,67 @@ interface Role {
     providers: [MessageService,ConfirmationService]
 })
 export class UsersComponent implements OnInit  {
-
     users: User[];
-    user: User;
-    dialogData: {
-        roles:string[],
-        passwordConfirmation:string,
-    } = {roles:[],passwordConfirmation:''}
+    userId: number|null = null;
     selectedUsers: User[];
     userDialog: boolean;
-    submitted: boolean;
     roles: Role[] = [
         {name:'Admin',code:'admin'},
         {name:'User',code:'user'},
     ];
-
+    itemsForm: FormGroup
+    defaults = {
+        login: '',
+        password: '',
+        firstName: '',
+        secondName: '',
+        thirdName: '',
+        roles: [],
+        birthDate: null,
+        isActive: '',
+    }
     constructor(
         public usersService: UsersService, 
         private messageService: MessageService, 
         private confirmationService: ConfirmationService,
+        private fb: FormBuilder,
     ) {}
 
     ngOnInit() {
-        // this.users = this.usersService.items
         this.usersService.getUsers()
             .subscribe(users=>this.users = users);
+        this.createForm()
+    }
+
+    private createForm() {
+        this.itemsForm = this.fb.group({
+            login: [this.defaults.login],
+            password: [this.defaults.password],
+            firstName: [this.defaults.firstName],
+            secondName: [this.defaults.secondName],
+            thirdName: [this.defaults.thirdName],
+            roles: [this.defaults.roles],
+            birthDate: [this.defaults.birthDate],
+            isActive: [this.defaults.isActive],
+        });
     }
 
     openNew() {
-        this.user = new User;
-        this.submitted = false;
+        this.itemsForm.reset(this.defaults)
         this.userDialog = true;
     }
 
     hideDialog() {
+        this.itemsForm.reset(this.defaults)
         this.userDialog = false;
-        this.submitted = false;
-        this.dialogData.roles = [];
-    }
+   }
 
     editUser(user: User) {
-        this.user = {...user};
-        this.dialogData.roles = this.user.roles.split(',').filter(role=>role)
+        this.userId = user.id
+        this.itemsForm.patchValue({
+            ...user, 
+            roles: user.roles.split(',').filter(role=>role),
+        });   
         this.userDialog = true;
     }
 
@@ -102,31 +121,27 @@ export class UsersComponent implements OnInit  {
     }
 
     saveUser() {
-        this.submitted = true;
-        if (this.user.login.trim()) {
-            this.user.roles = this.dialogData.roles.join(',')
-            if (this.user.id) {
-                this.usersService.updateUser(this.user, this.user.id)
-                    .pipe(
-                        catchError(this.errorHandler)
-                    )
-                    .subscribe(res => {
-                        if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
-                        this.user = new User;
-                    })             
-            } else {
-                this.usersService.createUser(this.user)
-                    .pipe(
-                        catchError(this.errorHandler)
-                    )
-                    .subscribe(res => {
-                        if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
-                        this.user = new User;
-                    })
-            }
-            this.userDialog = false;
-            this.dialogData.roles = [];
+
+        const user = new User({ 
+            ...this.itemsForm.value, 
+            roles: this.itemsForm.value.roles.length?this.itemsForm.value.roles.join(','):'',
+        })
+
+        if(!this.userId) {
+            this.usersService.createUser(user)
+                .pipe(catchError(this.errorHandler))
+                .subscribe(res => {
+                    if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Created', life: 3000 });
+                })
+        } else {
+            this.usersService.updateUser(user, this.userId)
+                .pipe(catchError(this.errorHandler))
+                .subscribe(res => {
+                    if(res) this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'User Updated', life: 3000 });
+                })             
         }
+        this.userDialog = false;
+
     }
 
     private errorHandler = (error: HttpErrorResponse)=>{
@@ -138,7 +153,6 @@ export class UsersComponent implements OnInit  {
           this.messageService.add({severity:'error', summary: `Backend returned code ${error.status}, body was: `, detail: error.error, life: 7000});
         }
         return of(null)
-        // return throwError(() => new Error('Something bad happened; please try again later.'));
     }
 
 

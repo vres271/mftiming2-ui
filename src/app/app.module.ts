@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import {TableModule} from 'primeng/table';
 import {ToastModule} from 'primeng/toast';
@@ -72,6 +73,7 @@ import { LoginComponent } from './components/login/login.component';
     InputSwitchModule,
     PasswordModule,
     CardModule,
+    ReactiveFormsModule,
    ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
