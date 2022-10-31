@@ -10,7 +10,7 @@ export class User {
   firstName: string
   secondName: string
   thirdName: string
-  roles: string
+  roles: Role[]
   isActive: boolean  
   birthDate: Date|null
   constructor(item?:any) {
@@ -21,7 +21,13 @@ export class User {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
-      if(item.roles!==undefined) this.roles = item.roles
+      if(item.roles!==undefined) {
+        if(typeof item.roles === 'string') {
+          this.roles = item.roles.split(',').filter((role:any)=>role)
+        } else {
+          this.roles = item.roles
+        }
+      }
       if(item.isActive!==undefined) this.isActive = item.isActive
       if(item.birthDate!==undefined) {
         if(typeof item.birthDate === 'string') {
@@ -51,7 +57,7 @@ export class UserDTO {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
-      if(item.roles!==undefined) this.roles = item.roles
+      if(item.roles) this.roles = item.roles.filter((role:any)=>role).join(',')
       if(item.isActive!==undefined) this.isActive = item.isActive
       if(item.birthDate) {
         let dateArray = item.birthDate.toLocaleString().split(',')[0].split('.')

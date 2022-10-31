@@ -53,10 +53,7 @@ openDialog(user?: User) {
     this.itemsForm.get('password')?.setValidators([Validators.required])        
   } else {
     this.userId = user.id
-    this.itemsForm.patchValue({
-        ...user, 
-        roles: user.roles.split(',').filter(role=>role),
-    });   
+    this.itemsForm.patchValue(user);   
     this.itemsForm.get('password')?.clearValidators()  
   }
   this.isOpened = true;
@@ -68,10 +65,7 @@ hideDialog() {
 }
 
 saveUser() {
-  const user = new User({
-    ...this.itemsForm.value,
-    roles: this.itemsForm.value.roles.length ? this.itemsForm.value.roles.join(',') : '',
-  });
+  const user = new User(this.itemsForm.value);
   this.onItemSave.emit(user)
   this.hideDialog()
 }
