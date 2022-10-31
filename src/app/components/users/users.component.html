@@ -32,7 +32,6 @@
                 <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
                 <th style="width: 3rem"></th>
                 <th pSortableColumn="login">Login <p-sortIcon field="login"></p-sortIcon></th>
-                <!-- <th pSortableColumn="password">password <p-sortIcon field="password"></p-sortIcon></th> -->
                 <th pSortableColumn="firstName">firstName <p-sortIcon field="firstName"></p-sortIcon></th>
                 <th pSortableColumn="secondName">secondName <p-sortIcon field="secondName"></p-sortIcon></th>
                 <th pSortableColumn="thirdName">thirdName <p-sortIcon field="thirdName"></p-sortIcon></th>
@@ -47,7 +46,6 @@
                 <td><p-tableCheckbox [value]="user"></p-tableCheckbox></td>
                 <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="editUser(user)"></button></td>
                 <td>{{user.login}}</td>
-                <!-- <td>{{user.password}}</td> -->
                 <td>{{user.firstName}}</td>
                 <td>{{user.secondName}}</td>
                 <td>{{user.thirdName}}</td>
@@ -56,11 +54,6 @@
                 <td>{{user.isActive}}</td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteUser(user)"></button></td>
             </tr>
-        </ng-template>
-        <ng-template pTemplate="summary">
-            <div class="flex align-items-center justify-content-between">
-                In total there are {{users ? users.length : 0 }} users.
-            </div>
         </ng-template>
     </p-table>
 </div>
@@ -71,7 +64,7 @@
             <div class="field col">
                 <div class="field">
                     <label for="login">login</label>
-                    <input type="text" pInputText id="login" formControlName="login" required autofocus />
+                    <input type="text" pInputText id="login" formControlName="login"  autofocus />
                 </div>
                 <div class="field" >
                     <label for="password">password</label>
@@ -79,15 +72,15 @@
                 </div>
                 <div class="field">
                     <label for="firstName">firstName</label>
-                    <input type="text" pInputText id="firstName" formControlName="firstName" required  />
+                    <input type="text" pInputText id="firstName" formControlName="firstName"   />
                 </div>
                 <div class="field">
                     <label for="secondName">secondName</label>
-                    <input type="text" pInputText id="secondName" formControlName="secondName" required  />
+                    <input type="text" pInputText id="secondName" formControlName="secondName"   />
                 </div>
                 <div class="field">
                     <label for="thirdName">thirdName</label>
-                    <input type="text" pInputText id="thirdName" formControlName="thirdName" required  />
+                    <input type="text" pInputText id="thirdName" formControlName="thirdName"   />
                 </div>
             </div>
             <div class="field col">
@@ -109,7 +102,7 @@
 
     <ng-template pTemplate="footer">
         <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+        <button pButton pRipple label="Save" [disabled]="!itemsForm.valid" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
     </ng-template>
 </p-dialog>
 

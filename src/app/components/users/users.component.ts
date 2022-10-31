@@ -43,7 +43,7 @@ export class UsersComponent implements OnInit  {
         private confirmationService: ConfirmationService,
         private fb: FormBuilder,
     ) {}
-
+ 
     ngOnInit() {
         this.usersService.getUsers()
             .subscribe(users=>this.users = users);
@@ -52,9 +52,9 @@ export class UsersComponent implements OnInit  {
 
     private createForm() {
         this.itemsForm = this.fb.group({
-            login: [this.defaults.login],
+            login: [this.defaults.login, [Validators.required]],
             password: [this.defaults.password],
-            firstName: [this.defaults.firstName],
+            firstName: [this.defaults.firstName, [Validators.required]],
             secondName: [this.defaults.secondName],
             thirdName: [this.defaults.thirdName],
             roles: [this.defaults.roles],
@@ -64,7 +64,20 @@ export class UsersComponent implements OnInit  {
     }
 
     openNew() {
+        this.userId = null
         this.itemsForm.reset(this.defaults)
+        this.itemsForm.get('password')?.setValidators([Validators.required])        
+        this.userDialog = true;
+    }
+
+    editUser(user: User) {
+        this.userId = user.id
+        this.itemsForm.reset(this.defaults)
+        this.itemsForm.patchValue({
+            ...user, 
+            roles: user.roles.split(',').filter(role=>role),
+        });   
+        this.itemsForm.get('password')?.clearValidators()        
         this.userDialog = true;
     }
 
@@ -72,15 +85,6 @@ export class UsersComponent implements OnInit  {
         this.itemsForm.reset(this.defaults)
         this.userDialog = false;
    }
-
-    editUser(user: User) {
-        this.userId = user.id
-        this.itemsForm.patchValue({
-            ...user, 
-            roles: user.roles.split(',').filter(role=>role),
-        });   
-        this.userDialog = true;
-    }
 
     refreshUsers() {
       this.usersService.getUsers({force:true})
