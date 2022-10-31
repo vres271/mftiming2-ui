@@ -28,7 +28,7 @@ export class UsersComponent implements OnInit  {
  
     ngOnInit() {
         this.usersService.getUsers()
-            .subscribe(users=>this.users = users);
+            .subscribe();
     }
 
     openDialog(user?: User) {
@@ -39,7 +39,7 @@ export class UsersComponent implements OnInit  {
     saveUser(user: User) { 
         (!this.userId?this.usersService.createUser(user):this.usersService.updateUser(user, this.userId))
             .pipe(catchError(this.errorHandler))
-            .subscribe(res=>this.successMessage(this.userId?'User Updated':'User Created'))
+            .subscribe(res=>{if(res) this.successMessage(this.userId?'User Updated':'User Created')})
     }
 
     refreshUsers() {

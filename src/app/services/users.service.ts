@@ -1,5 +1,5 @@
 import { map, tap } from 'rxjs/operators';
-import { APIService } from './api.service';
+import { APIService, affectedResponse } from './api.service';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
@@ -22,7 +22,7 @@ export class User {
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
       if(item.roles!==undefined) {
-        if(typeof item.roles === 'string') {
+        if(typeof item.birthDate === 'string') {
           this.roles = item.roles.split(',').filter((role:any)=>role)
         } else {
           this.roles = item.roles
@@ -57,7 +57,7 @@ export class UserDTO {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
-      if(item.roles) this.roles = item.roles.filter((role:any)=>role).join(',')
+      if(item.roles) this.roles = item.roles.join(',')
       if(item.isActive!==undefined) this.isActive = item.isActive
       if(item.birthDate) {
         let dateArray = item.birthDate.toLocaleString().split(',')[0].split('.')
@@ -82,55 +82,54 @@ export const userRoles:Role[] = [
   {name:'User',code:'user'},
 ];
 
-export class Item  extends User{}
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService {
+  private entityName = 'users'
+  items:User[] = []
+  
+  constructor(private apiService: APIService) { }
 
-
-export class itemsService {
-  entityName = 'items'
-  itemTypeClass = Item
-  item:Item
-  items:(typeof this.item)[] = []
-  constructor(public apiService: APIService) { }
-
-  getUsers(params?:{force?:boolean}):Observable<(typeof this.item)[]> {
+  getUsers(params?:{force?:boolean}):Observable<User[]> {
     if(this.items.length && !params?.force) return of(this.items)
     return this.apiService.get(this.entityName)
       .pipe(
-        map((items:(typeof this.item)[])=>{
-          this.items = items.map(item=>new (this.itemTypeClass)(item))
+        map((items:User[])=>{
+          this.items = items.map(item=>new User(item))
           return this.items
         })
       )
   }
 
-  getUser():Observable<(typeof this.item)> {
-    return this.apiService.get(this.entityName+'/8')
+  getUser(userId:number):Observable<User> {
+    return this.apiService.get(this.entityName+'/'+userId)
   }
 
-  createUser(newUser:(typeof this.item)):Observable<(typeof this.item)> {
+  createUser(newUser:User):Observable<any> {
     return this.apiService.post(this.entityName, new CreateUserDto(newUser))
       .pipe(
-        tap(res=>{
-          const createdUser = new (this.itemTypeClass)(res);
+        tap((res:any)=>{
+          const createdUser = new User(res);
           if(createdUser.password) delete createdUser.password;
           this.items.push(createdUser);
         })
       )
   }
 
-  deleteUser(userId:number):Observable<(typeof this.item)> {
+  deleteUser(userId:number):Observable<any> {
     return this.apiService.delete(this.entityName, userId)
       .pipe(
-        tap(res=>{
+        tap((res:any)=>{
           this.items = this.items.filter(item => item.id !== userId);          
         })
       )
   }
 
-  updateUser(updatingUser:(typeof this.item), userId:number):Observable<(typeof this.item)> {
+  updateUser(updatingUser:User, userId:number):Observable<any> {
     return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
       .pipe(
-        tap(_=>{
+        tap((res:any)=>{
           updatingUser.id = userId
           if(updatingUser.password) delete updatingUser.password;
           this.items[this.findIndexById(String(userId))] = updatingUser;
@@ -149,19 +148,8 @@ export class itemsService {
         }
     }
     return index;
-  }
-
-
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UsersService extends itemsService{
-  override entityName = 'users'
-  override item:User
-  override itemTypeClass = User
-  constructor(override apiService: APIService) {
-    super(apiService)
-  }
+
+
 }
