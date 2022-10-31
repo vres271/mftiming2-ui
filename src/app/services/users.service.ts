@@ -82,41 +82,43 @@ export const userRoles:Role[] = [
   {name:'User',code:'user'},
 ];
 
-@Injectable({
-  providedIn: 'root'
-})
-export class UsersService {
-  private entityName = 'users'
-  items:User[] = []
-  constructor(private apiService: APIService) { }
+export class Item  extends User{}
 
-  getUsers(params?:{force?:boolean}):Observable<User[]> {
+
+export class itemsService {
+  entityName = 'items'
+  itemTypeClass = Item
+  item:Item
+  items:(typeof this.item)[] = []
+  constructor(public apiService: APIService) { }
+
+  getUsers(params?:{force?:boolean}):Observable<(typeof this.item)[]> {
     if(this.items.length && !params?.force) return of(this.items)
     return this.apiService.get(this.entityName)
       .pipe(
-        map((items:User[])=>{
-          this.items = items.map(item=>new User(item))
+        map((items:(typeof this.item)[])=>{
+          this.items = items.map(item=>new (this.itemTypeClass)(item))
           return this.items
         })
       )
   }
 
-  getUser():Observable<User> {
+  getUser():Observable<(typeof this.item)> {
     return this.apiService.get(this.entityName+'/8')
   }
 
-  createUser(newUser:User):Observable<User> {
+  createUser(newUser:(typeof this.item)):Observable<(typeof this.item)> {
     return this.apiService.post(this.entityName, new CreateUserDto(newUser))
       .pipe(
         tap(res=>{
-          const createdUser = new User(res);
+          const createdUser = new (this.itemTypeClass)(res);
           if(createdUser.password) delete createdUser.password;
           this.items.push(createdUser);
         })
       )
   }
 
-  deleteUser(userId:number):Observable<User> {
+  deleteUser(userId:number):Observable<(typeof this.item)> {
     return this.apiService.delete(this.entityName, userId)
       .pipe(
         tap(res=>{
@@ -125,7 +127,7 @@ export class UsersService {
       )
   }
 
-  updateUser(updatingUser:User, userId:number):Observable<User> {
+  updateUser(updatingUser:(typeof this.item), userId:number):Observable<(typeof this.item)> {
     return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
       .pipe(
         tap(_=>{
@@ -147,8 +149,19 @@ export class UsersService {
         }
     }
     return index;
+  }
+
+
 }
 
-
-
+@Injectable({
+  providedIn: 'root'
+})
+export class UsersService extends itemsService{
+  override entityName = 'users'
+  override item:User
+  override itemTypeClass = User
+  constructor(override apiService: APIService) {
+    super(apiService)
+  }
 }
