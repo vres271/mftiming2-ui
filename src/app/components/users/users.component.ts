@@ -3,7 +3,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Component, OnInit, ViewChild , } from '@angular/core';
 import { UsersService, User } from './../../services/users.service';
-import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {  of } from 'rxjs';
 
@@ -11,19 +10,32 @@ import {  of } from 'rxjs';
 @Component({
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss'],
-    providers: [MessageService,ConfirmationService]
+    providers: [MessageService]
 })
 export class UsersComponent implements OnInit  {
     users: User[];
     userId: number|null = null;
-    selectedUsers: User[];
     @ViewChild(UsersDialogComponent) 
     private usersDialogComponent: UsersDialogComponent
+
+    tableOptions={
+        itemsService: this.usersService,
+        globalFilterFields: ['login','firstName','secondName','thirdName'],
+        cols: [
+            {name:'login'},
+            {name:'firstName'},
+            {name:'secondName'},
+            {name:'thirdName'},
+            {name:'fullName'},
+            {name:'roles'},
+            {name:'birthDateString'},
+            {name:'isActive'},
+        ]
+    }
 
     constructor(
         public usersService: UsersService, 
         private messageService: MessageService, 
-        private confirmationService: ConfirmationService,
     ) {}
  
     ngOnInit() {
@@ -51,31 +63,17 @@ export class UsersComponent implements OnInit  {
     }
 
     deleteSelectedUsers() {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete the selected users?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.users = this.users.filter(val => !this.selectedUsers?.includes(val));
-                this.selectedUsers = [];
-                this.successMessage('Users Deleted')
-            }
-        });
+        // this.users = this.users.filter(val => !this.selectedItems?.includes(val));
+        // this.selectedItems = [];
+        this.successMessage('Users Deleted')
     }
 
     deleteUser(user: User) {
-        this.confirmationService.confirm({
-            message: 'Are you sure you want to delete ' + user.login + '?',
-            header: 'Confirm',
-            icon: 'pi pi-exclamation-triangle',
-            accept: () => {
-                this.usersService.deleteUser(user.id)
-                  .pipe(catchError(this.errorHandler))
-                  .subscribe(res=>this.successMessage('User Deleted'))
-            }
-        });
-    }
+        this.usersService.deleteUser(user.id)
+            .pipe(catchError(this.errorHandler))
+            .subscribe(res=>this.successMessage('User Deleted'))
 
+    }
 
     private successMessage(detail:string) {
         this.messageService.add({ severity: 'success', summary: 'Successful', detail, life: 3000 });

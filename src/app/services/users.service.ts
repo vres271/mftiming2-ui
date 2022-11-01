@@ -15,6 +15,13 @@ export class User {
   roles: Role[]
   isActive: boolean  
   birthDate: Date|null
+  toString() {return this.login}
+  get birthDateString():string {return this.birthDate?[
+      this.birthDate.getDate().toString().padStart(2, '0'),
+      (this.birthDate.getMonth() + 1).toString().padStart(2, '0'),
+      this.birthDate.getFullYear(),
+    ].join('.'):''
+  }
   constructor(item?:any) {
     if(item) {
       this.id = item.id
