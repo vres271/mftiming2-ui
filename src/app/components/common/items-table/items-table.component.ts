@@ -13,7 +13,11 @@ export class ItemsTableComponent implements OnInit {
   @Input() tableOptions:{
       itemsService: any,
       globalFilterFields: string[],
-      cols: {name:string}[]
+      cols: {
+        name:string,
+        view?:string,
+        type?:string,
+      }[]
   }
   @Output() onNew = new EventEmitter()
   @Output() onEdit = new EventEmitter<any>()

@@ -28,8 +28,9 @@ export class UsersComponent implements OnInit  {
             {name:'thirdName'},
             {name:'fullName'},
             {name:'roles'},
-            {name:'birthDateString'},
-            {name:'isActive'},
+            // {name:'birthDate',view:'birthDateString'},
+            {name:'birthDate',type:'date'},
+            {name:'isActive',type:'flag'},
         ]
     }
 

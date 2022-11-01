@@ -38,7 +38,11 @@
             <tr>
                 <td><p-tableCheckbox [value]="item"></p-tableCheckbox></td>
                 <td><button pButton pRipple icon="pi pi-pencil" class="p-button-text p-button-sm p-button-success mr-2" (click)="editItem(item)"></button></td>
-                <td *ngFor="let col of tableOptions.cols">{{item[col.name]}}</td>
+                <td *ngFor="let col of tableOptions.cols" [ngSwitch]="col.type">
+                    <span *ngSwitchCase="undefined">{{col.view?item[col.view]:item[col.name]}}</span>
+                    <span *ngSwitchCase="'date'">{{item[col.name]|date:'dd.MM.yyyy'}}</span>
+                    <span *ngSwitchCase="'flag'"><i *ngIf="item[col.name]" class="pi pi-check"></i></span>
+                </td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteItem(item)"></button></td>
             </tr>
         </ng-template>
