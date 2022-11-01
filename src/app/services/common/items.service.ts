@@ -39,7 +39,7 @@ export class ItemsService {
     return this.apiService.get(this.entityName)
       .pipe(
         map((items:Item[])=>{
-          this.items = items.map(item=>new (this.itemClass)(item))
+          this.items = items.map(item=>this.afterGet(new (this.itemClass)(item)))
           return this.items
         })
       )
