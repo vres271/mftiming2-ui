@@ -11,6 +11,7 @@ export class User {
   firstName: string
   secondName: string
   thirdName: string
+  get fullName():string {return (this.secondName?(this.secondName[0]+'. '):'')+(this.thirdName?(this.thirdName[0]+'. '):'')+(this.firstName?this.firstName:'')}
   roles: Role[]
   isActive: boolean  
   birthDate: Date|null
