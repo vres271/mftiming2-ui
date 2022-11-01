@@ -5,7 +5,7 @@
     (onNew)="openDialog()"
     (onEdit)="openDialog($event)"
     (onDelete)="deleteUser($event)"
-    (onDeleteSelected)="deleteSelectedUsers()"
+    (onDeleteSelected)="deleteSelectedUsers($event)"
     (onRefresh)="refreshUsers()"
     ></app-items-table>
 <app-users-dialog (onItemSave)="saveUser($event)"></app-users-dialog>

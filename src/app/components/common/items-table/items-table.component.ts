@@ -18,7 +18,7 @@ export class ItemsTableComponent implements OnInit {
   @Output() onNew = new EventEmitter()
   @Output() onEdit = new EventEmitter<any>()
   @Output() onDelete = new EventEmitter<any>()
-  @Output() onDeleteSelected = new EventEmitter()
+  @Output() onDeleteSelected = new EventEmitter<{items: any[], callback:Function}>()
   @Output() onRefresh = new EventEmitter()
 
   selectedItems: Item[];
@@ -49,13 +49,13 @@ export class ItemsTableComponent implements OnInit {
     });
   }
 
-  deleteSelectedItems() {
+  deleteSelectedItems(items:Item[]) {
     this.confirmationService.confirm({
       message: 'Are you sure you want to delete the selected users?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.onDeleteSelected.emit()
+        this.onDeleteSelected.emit({items,callback:()=>{this.selectedItems=[]}})
       }
     });
   }

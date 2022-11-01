@@ -62,9 +62,10 @@ export class UsersComponent implements OnInit  {
         .subscribe();
     }
 
-    deleteSelectedUsers() {
+    deleteSelectedUsers(selObject:{items: User[], callback:Function}) {
         // this.users = this.users.filter(val => !this.selectedItems?.includes(val));
-        // this.selectedItems = [];
+        console.log(selObject.items)
+        selObject.callback()
         this.successMessage('Users Deleted')
     }
 
