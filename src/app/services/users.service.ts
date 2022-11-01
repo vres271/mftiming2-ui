@@ -1,3 +1,4 @@
+import { ItemsService } from './common/items.service';
 import { map, tap } from 'rxjs/operators';
 import { APIService, affectedResponse } from './api.service';
 import { Injectable } from '@angular/core';
@@ -82,74 +83,27 @@ export const userRoles:Role[] = [
   {name:'User',code:'user'},
 ];
 
+
 @Injectable({
   providedIn: 'root'
 })
-export class UsersService {
-  private entityName = 'users'
-  items:User[] = []
-  
-  constructor(private apiService: APIService) { }
-
-  getUsers(params?:{force?:boolean}):Observable<User[]> {
-    if(this.items.length && !params?.force) return of(this.items)
-    return this.apiService.get(this.entityName)
-      .pipe(
-        map((items:User[])=>{
-          this.items = items.map(item=>new User(item))
-          return this.items
-        })
-      )
+export class UsersService extends ItemsService{
+  override entityName = 'users'
+  override items:User[] = []
+  override itemClass = User
+  override createItemDtoClass = CreateUserDto
+  override updateItemDtoClass = UpdateUserDto
+  override afterCreate(user:User):User {
+    if(user.password) delete user.password;
+    return user;
   }
-
-  getUser(userId:number):Observable<User> {
-    return this.apiService.get(this.entityName+'/'+userId)
+  override afterUpdate(user:User):User {
+    if(user.password) delete user.password;
+    return user;
   }
-
-  createUser(newUser:User):Observable<any> {
-    return this.apiService.post(this.entityName, new CreateUserDto(newUser))
-      .pipe(
-        tap((res:any)=>{
-          const createdUser = new User(res);
-          if(createdUser.password) delete createdUser.password;
-          this.items.push(createdUser);
-        })
-      )
-  }
-
-  deleteUser(userId:number):Observable<any> {
-    return this.apiService.delete(this.entityName, userId)
-      .pipe(
-        tap((res:any)=>{
-          this.items = this.items.filter(item => item.id !== userId);          
-        })
-      )
-  }
-
-  updateUser(updatingUser:User, userId:number):Observable<any> {
-    return this.apiService.patch(this.entityName, userId, new UpdateUserDto(updatingUser))
-      .pipe(
-        tap((res:any)=>{
-          updatingUser.id = userId
-          if(updatingUser.password) delete updatingUser.password;
-          this.items[this.findIndexById(String(userId))] = updatingUser;
-        })
-      )
-    
-  }
-
-
-  findIndexById(id: string): number {
-    let index = -1;
-    for (let i = 0; i < this.items.length; i++) {
-        if (this.items[i].id === +id) {
-            index = i;
-            break;
-        }
-    }
-    return index;
+  getUsers(params?:{force?:boolean}):Observable<User[]> {return this.getItems(params) as Observable<User[]>}
+  createUser(newItem:User):Observable<any> {return this.createItem(newItem) as Observable<any>}
+  deleteUser(itemId:number):Observable<affectedResponse> {return this.deleteItem(itemId) as Observable<affectedResponse>}
+  updateUser(updatingItem:User, itemId:number):Observable<affectedResponse> {return this.updateItem(updatingItem, itemId) as Observable<affectedResponse>}
 }
 
-
-
-}
