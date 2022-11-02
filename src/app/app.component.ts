@@ -14,7 +14,8 @@ export class AppComponent {
   title = 'mftiming2-ui';
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},
-    {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"}
+    {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
+    {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
   ];
 
   logOut() {

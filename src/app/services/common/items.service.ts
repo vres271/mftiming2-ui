@@ -3,7 +3,7 @@ import { map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-export class Item {
+export class Item{
   id: number
   constructor(item?:any) {}
 }
@@ -67,6 +67,7 @@ export class ItemsService {
           updatingItem.id = itemId
           updatingItem = this.afterUpdate(updatingItem)
           this.items[this.findIndexById(String(itemId))] = updatingItem;
+          this.items = [...this.items]
         })
       )
   }

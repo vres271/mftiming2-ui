@@ -1,8 +1,7 @@
 import { ItemsService } from './common/items.service';
-import { map, tap } from 'rxjs/operators';
-import { APIService, affectedResponse } from './api.service';
+import { affectedResponse } from './api.service';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 
 export class User {
   id: number

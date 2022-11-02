@@ -1,0 +1,11 @@
+<p-toast></p-toast>
+<app-items-table  
+    [tableOptions]="tableOptions"
+    (onNew)="openDialog()"
+    (onEdit)="openDialog($event)"
+    (onDelete)="deleteCategory($event)"
+    (onDeleteSelected)="deleteSelectedCategories($event)"
+    (onRefresh)="refreshCategories()"
+    ></app-items-table>
+<app-item-dialog (onItemSave)="saveCategory($event)"></app-item-dialog>
+

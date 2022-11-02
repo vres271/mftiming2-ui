@@ -1,1 +1,22 @@
-<p>item-dialog works!</p>
+<p-dialog [(visible)]="isOpened" [style]="{width: '450px'}" header="Item Details" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div [formGroup]="itemsForm">
+            <div class="field">
+                <label for="name">name</label>
+                <input type="text" pInputText id="name" formControlName="name"  autofocus />
+            </div>
+            <div class="field">
+                <label for="ageFrom">ageFrom</label>
+                <input type="text" pInputText id="ageFrom" formControlName="ageFrom"  autofocus />
+            </div>
+            <div class="field">
+                <label for="ageTo">ageTo</label>
+                <input type="text" pInputText id="ageTo" formControlName="ageTo"  autofocus />
+            </div>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Save" [disabled]="!itemsForm.valid" icon="pi pi-check" class="p-button-text" (click)="saveItem()"></button>
+    </ng-template>
+</p-dialog>
