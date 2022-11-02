@@ -1,3 +1,4 @@
+import { Validators } from '@angular/forms';
 import { Item } from './../../services/common/items.service';
 import { ItemDialogComponent } from './../common/item-dialog/item-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -26,6 +27,15 @@ export class CategoriesComponent implements OnInit  {
             {name:'name'},
             {name:'ageFrom'},
             {name:'ageTo'},
+        ]
+    }
+
+    dialogOptions={
+        itemClass: Category,
+        fields: [
+            {name:'name', default:'', validators: [Validators.required]},
+            {name:'ageFrom', default:null},
+            {name:'ageTo', default:null},
         ]
     }
 

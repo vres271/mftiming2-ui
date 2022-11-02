@@ -7,5 +7,5 @@
     (onDeleteSelected)="deleteSelectedCategories($event)"
     (onRefresh)="refreshCategories()"
     ></app-items-table>
-<app-item-dialog (onItemSave)="saveCategory($event)"></app-item-dialog>
+<app-item-dialog (onItemSave)="saveCategory($event)" [dialogOptions]="dialogOptions"></app-item-dialog>
 
