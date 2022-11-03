@@ -1,3 +1,4 @@
+import { CategoriesService, Category } from './categories.service';
 import { ItemsService } from './common/items.service';
 import { affectedResponse } from './api.service';
 import { Injectable } from '@angular/core';
@@ -122,5 +123,6 @@ export class UsersService extends ItemsService{
   createUser(newItem:User):Observable<any> {return this.createItem(newItem) as Observable<any>}
   deleteUser(itemId:number):Observable<affectedResponse> {return this.deleteItem(itemId) as Observable<affectedResponse>}
   updateUser(updatingItem:User, itemId:number):Observable<affectedResponse> {return this.updateItem(updatingItem, itemId) as Observable<affectedResponse>}
+
 }
 

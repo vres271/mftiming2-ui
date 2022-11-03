@@ -17,6 +17,7 @@ export class ItemsTableComponent implements OnInit {
         name:string,
         view?:string,
         type?:string,
+        func?:Function,
       }[]
   }
   @Output() onNew = new EventEmitter()

@@ -1,3 +1,4 @@
+import { CategoriesService } from './../categories.service';
 import { APIService } from '../api.service';
 import { map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -27,12 +28,26 @@ export class ItemsService {
   createItemDtoClass = CreateItemDto
   updateItemDtoClass = UpdateItemDto
 
-  constructor(public apiService: APIService) { }
+  map:any = {id:{}}
+
+  constructor(
+    public apiService: APIService,
+    ) { }
 
   afterGet(item:Item):Item {return item}
   afterCreate(item:Item):Item {return item}
   afterUpdate(item:Item):Item {return item}
   afterDelete(item:Item):Item {return item}
+
+  createMap() {
+    this.items.forEach((item:any)=>{
+      for(let mapKey in this.map) {
+        if(mapKey in item) {
+          this.map[mapKey][item[mapKey]] = item
+        }
+      }
+    })
+  }
 
   getItems(params?:{force?:boolean}):Observable<Item[]> {
     if(this.items.length && !params?.force) return of(this.items)
@@ -40,6 +55,7 @@ export class ItemsService {
       .pipe(
         map((items:Item[])=>{
           this.items = items.map(item=>this.afterGet(new (this.itemClass)(item)))
+          this.createMap()
           return this.items
         })
       )
@@ -56,6 +72,7 @@ export class ItemsService {
           let createdItem = new (this.itemClass)(res);
           createdItem = this.afterCreate(createdItem)
           this.items.push(createdItem);
+          this.createMap()
         })
       )
   }
@@ -68,6 +85,7 @@ export class ItemsService {
           updatingItem = this.afterUpdate(updatingItem)
           this.items[this.findIndexById(String(itemId))] = updatingItem;
           this.items = [...this.items]
+          this.createMap()
         })
       )
   }
@@ -76,7 +94,8 @@ export class ItemsService {
     return this.apiService.delete(this.entityName, itemId)
       .pipe(
         tap((res:any)=>{
-          this.items = this.items.filter(item => item.id !== itemId);          
+          this.items = this.items.filter(item => item.id !== itemId);  
+          this.createMap()        
         })
       )
   }

@@ -1,3 +1,4 @@
+import { CategoriesService } from './../../services/categories.service';
 import { UsersDialogComponent } from './users-dialog/users-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
@@ -28,7 +29,7 @@ export class UsersComponent implements OnInit  {
             {name:'thirdName'},
             {name:'fullName'},
             {name:'roles'},
-            {name:'categoriesIds'},
+            {name:'categoriesIds',type:'func', func:(value:number[])=>value.map((id:number)=>this.categoriesService.map.id[id].name)  },
             // {name:'birthDate',view:'birthDateString'},
             {name:'birthDate',type:'date'},
             {name:'isActive',type:'flag'},
@@ -38,6 +39,7 @@ export class UsersComponent implements OnInit  {
     constructor(
         public usersService: UsersService, 
         private messageService: MessageService, 
+        private categoriesService: CategoriesService, 
     ) {}
  
     ngOnInit() {

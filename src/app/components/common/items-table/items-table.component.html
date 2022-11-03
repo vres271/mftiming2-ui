@@ -42,6 +42,7 @@
                     <span *ngSwitchCase="undefined">{{col.view?item[col.view]:item[col.name]}}</span>
                     <span *ngSwitchCase="'date'">{{item[col.name]|date:'dd.MM.yyyy'}}</span>
                     <span *ngSwitchCase="'flag'"><i *ngIf="item[col.name]" class="pi pi-check"></i></span>
+                    <span *ngSwitchCase="'func'">{{col.func?col.func(item[col.name]):''}}</span>
                 </td>
                 <td><button pButton pRipple icon="pi pi-trash" class="p-button-text p-button-sm p-button-warning" (click)="deleteItem(item)"></button></td>
             </tr>
