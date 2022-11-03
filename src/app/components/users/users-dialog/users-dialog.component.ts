@@ -1,3 +1,4 @@
+import { CategoriesService } from './../../../services/categories.service';
 import { User, userRoles } from './../../../services/users.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
@@ -22,11 +23,13 @@ export class UsersDialogComponent implements OnInit {
       roles: [],
       birthDate: null,
       isActive: '',
+      categoriesIds: [],
   }
   roles = userRoles
 
   constructor(
     private fb: FormBuilder,
+    public categoriesService: CategoriesService,
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +46,7 @@ export class UsersDialogComponent implements OnInit {
         roles: [this.defaults.roles],
         birthDate: [this.defaults.birthDate],
         isActive: [this.defaults.isActive],
+        categoriesIds: [this.defaults.categoriesIds],
     });
 }
 

@@ -29,6 +29,10 @@
                     <p-multiSelect [options]="roles" formControlName="roles" optionLabel="name" optionValue="code"></p-multiSelect>
                 </div>
                 <div class="field">
+                    <label for="categoriesIds">categories</label>
+                    <p-multiSelect [options]="categoriesService.items" formControlName="categoriesIds" optionLabel="name" optionValue="id"></p-multiSelect>
+                </div>
+                <div class="field">
                     <label for="birthDate">birthDate</label>
                     <p-calendar formControlName="birthDate"  dateFormat="dd.mm.yy"></p-calendar>
                 </div>

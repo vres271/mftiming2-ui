@@ -14,6 +14,7 @@ export class User {
   roles: Role[]
   isActive: boolean  
   birthDate: Date|null
+  categoriesIds: number[]
   toString() {return this.login}
   get birthDateString():string {return this.birthDate?[
       this.birthDate.getDate().toString().padStart(2, '0'),
@@ -30,7 +31,7 @@ export class User {
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
       if(item.roles!==undefined) {
-        if(typeof item.birthDate === 'string') {
+        if(typeof item.roles === 'string') {
           this.roles = item.roles.split(',').filter((role:any)=>role)
         } else {
           this.roles = item.roles
@@ -45,6 +46,7 @@ export class User {
         }
         
       }
+      if(item.categoriesIds!==undefined) this.categoriesIds = item.categoriesIds
     }
   }
 }
@@ -56,8 +58,9 @@ export class UserDTO {
   secondName: string = ''
   thirdName: string = ''
   roles: string = ''
-  isActive: boolean  = false; 
+  isActive: boolean  = false
   birthDate: string|null
+  categoriesIds: number[]
   constructor(item?:User) {
     if(item) {
       this.login = item.login
@@ -65,7 +68,13 @@ export class UserDTO {
       if(item.firstName!==undefined) this.firstName = item.firstName
       if(item.secondName!==undefined) this.secondName = item.secondName
       if(item.thirdName!==undefined) this.thirdName = item.thirdName
-      if(item.roles) this.roles = item.roles.join(',')
+      if(item.roles) {
+        if(typeof item.roles !== 'string') {
+          this.roles = item.roles.filter(role=>role).join(',')
+        } else {
+          this.roles = item.roles
+        }
+      }
       if(item.isActive!==undefined) this.isActive = item.isActive
       if(item.birthDate) {
         let dateArray = item.birthDate.toLocaleString().split(',')[0].split('.')
@@ -73,6 +82,7 @@ export class UserDTO {
       } else {
         this.birthDate = item.birthDate
       }
+      if(item.categoriesIds!==undefined) this.categoriesIds = item.categoriesIds
     }
   }
 }
