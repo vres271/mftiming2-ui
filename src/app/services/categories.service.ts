@@ -8,6 +8,7 @@ export class Category {
   name: string
   ageFrom: number|null
   ageTo: number|null
+  app: any
   toString() {return this.name}
   constructor(item?:any) {
     if(item) {

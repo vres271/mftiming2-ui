@@ -16,12 +16,16 @@ export class User {
   isActive: boolean  
   birthDate: Date|null
   categoriesIds: number[]
+  app: any
   toString() {return this.login}
   get birthDateString():string {return this.birthDate?[
       this.birthDate.getDate().toString().padStart(2, '0'),
       (this.birthDate.getMonth() + 1).toString().padStart(2, '0'),
       this.birthDate.getFullYear(),
     ].join('.'):''
+  }
+  get categoriesName() {
+    return this.categoriesIds.map(id=>this.app?.services?.categoriesService?.map?.id[id]?.name).join(', ')  
   }
   constructor(item?:any) {
     if(item) {
@@ -45,7 +49,6 @@ export class User {
         } else {
           this.birthDate = item.birthDate
         }
-        
       }
       if(item.categoriesIds!==undefined) this.categoriesIds = item.categoriesIds
     }

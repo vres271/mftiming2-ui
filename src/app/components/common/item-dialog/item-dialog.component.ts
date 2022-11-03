@@ -11,7 +11,7 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 export class ItemDialogComponent implements OnInit {
   @Output() onItemSave = new EventEmitter<any>()
   @Input() dialogOptions:{
-    itemClass: any,
+    itemsService: any,
     fields: {
       name:string,
       validators?:any[],
@@ -57,7 +57,7 @@ export class ItemDialogComponent implements OnInit {
   }
 
   saveItem() {
-    const item = new (this.dialogOptions.itemClass)(this.itemsForm.value);
+    const item = this.dialogOptions.itemsService.newItem(this.itemsForm.value);
     this.onItemSave.emit(item)
     this.hideDialog()
   }

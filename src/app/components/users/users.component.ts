@@ -1,7 +1,7 @@
 import { CategoriesService } from './../../services/categories.service';
 import { UsersDialogComponent } from './users-dialog/users-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 import { Component, OnInit, ViewChild , } from '@angular/core';
 import { UsersService, User } from './../../services/users.service';
 import { MessageService } from 'primeng/api';
@@ -21,15 +21,16 @@ export class UsersComponent implements OnInit  {
 
     tableOptions={
         itemsService: this.usersService,
-        globalFilterFields: ['login','firstName','secondName','thirdName'],
+        globalFilterFields: ['login','firstName','secondName','thirdName','categoriesName'],
         cols: [
             {name:'login'},
             {name:'firstName'},
             {name:'secondName'},
             {name:'thirdName'},
             {name:'fullName'},
+            {name:'categoriesName'},
             {name:'roles'},
-            {name:'categoriesIds',type:'func', func:(value:number[])=>value.map((id:number)=>this.categoriesService.map.id[id].name)  },
+            {name:'categoriesIds',type:'func', func:(value:number[])=>value.map((id:number)=>this.categoriesService?.map?.id[id]?.name)  },
             // {name:'birthDate',view:'birthDateString'},
             {name:'birthDate',type:'date'},
             {name:'isActive',type:'flag'},
@@ -44,6 +45,7 @@ export class UsersComponent implements OnInit  {
  
     ngOnInit() {
         this.usersService.getUsers()
+            .pipe(mergeMap(q=>this.categoriesService.getCategories()))
             .subscribe();
     }
 

@@ -31,7 +31,7 @@ export class CategoriesComponent implements OnInit  {
     }
 
     dialogOptions={
-        itemClass: Category,
+        itemsService: this.categoriesService,
         fields: [
             {name:'name', default:'', validators: [Validators.required]},
             {name:'ageFrom', default:null},

@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { CategoriesService } from './services/categories.service';
+import { UsersService } from './services/users.service';
+import { APPService } from './services/app.service';
+import { Component, OnInit } from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import { AuthService } from './services/auth.service';
 
@@ -7,10 +10,21 @@ import { AuthService } from './services/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(
     public authService: AuthService,
+    public appService: APPService,
+    public usersService: UsersService,
+    public categoriesService: CategoriesService,
     ) {}
+
+  ngOnInit(): void {
+    this.appService.services = {
+      usersService: this.usersService,
+      categoriesService: this.categoriesService
+    }
+  }
+  
   title = 'mftiming2-ui';
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},

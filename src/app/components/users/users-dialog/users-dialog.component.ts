@@ -1,5 +1,5 @@
 import { CategoriesService } from './../../../services/categories.service';
-import { User, userRoles } from './../../../services/users.service';
+import { User, userRoles, UsersService } from './../../../services/users.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
@@ -9,7 +9,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
   styleUrls: ['./users-dialog.component.scss']
 })
 export class UsersDialogComponent implements OnInit {
-  @Output() onItemSave = new EventEmitter<User>()
+  @Output() onItemSave = new EventEmitter<any>()
   isOpened: boolean = false
   userId: number|null = null;
 
@@ -30,6 +30,7 @@ export class UsersDialogComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public categoriesService: CategoriesService,
+    public usersService: UsersService,
   ) { }
 
   ngOnInit(): void {
@@ -69,7 +70,7 @@ hideDialog() {
 }
 
 saveUser() {
-  const user = new User(this.itemsForm.value);
+  const user = this.usersService.newItem(this.itemsForm.value);
   this.onItemSave.emit(user)
   this.hideDialog()
 }

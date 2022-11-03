@@ -1,3 +1,4 @@
+import { APPService } from './../app.service';
 import { CategoriesService } from './../categories.service';
 import { APIService } from '../api.service';
 import { map, tap } from 'rxjs/operators';
@@ -6,6 +7,7 @@ import { Observable, of } from 'rxjs';
 
 export class Item{
   id: number
+  app: any
   constructor(item?:any) {}
 }
 
@@ -32,6 +34,7 @@ export class ItemsService {
 
   constructor(
     public apiService: APIService,
+    public appService: APPService
     ) { }
 
   afterGet(item:Item):Item {return item}
@@ -49,12 +52,18 @@ export class ItemsService {
     })
   }
 
+  newItem(itemData?:any) {
+    const item = new (this.itemClass)(itemData)
+    item.app = this.appService 
+    return item
+  }
+
   getItems(params?:{force?:boolean}):Observable<Item[]> {
     if(this.items.length && !params?.force) return of(this.items)
     return this.apiService.get(this.entityName)
       .pipe(
         map((items:Item[])=>{
-          this.items = items.map(item=>this.afterGet(new (this.itemClass)(item)))
+          this.items = items.map(item=>this.afterGet(this.newItem(item)))
           this.createMap()
           return this.items
         })
@@ -69,7 +78,7 @@ export class ItemsService {
     return this.apiService.post(this.entityName, new (this.createItemDtoClass)(newItem))
       .pipe(
         tap((res:any)=>{
-          let createdItem = new (this.itemClass)(res);
+          let createdItem = this.newItem(res);
           createdItem = this.afterCreate(createdItem)
           this.items.push(createdItem);
           this.createMap()
