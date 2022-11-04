@@ -32,8 +32,8 @@ export class AppComponent implements OnInit {
       )
       .subscribe();
 
-      this.appService.init$.next(true)    
-      this.appService.init$.complete()
+      // this.appService.init$.next(true)    
+      // this.appService.init$.complete()
   }
   
   title = 'mftiming2-ui';

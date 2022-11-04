@@ -9,11 +9,11 @@ import { AsyncSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class APPService {
-  init$ = new AsyncSubject();
+  // init$ = new AsyncSubject();
   services: any
   constructor() { 
-    this.init$
-      .subscribe(res=>{console.log('init$ fired in APPService')})
+    // this.init$
+    //   .subscribe(res=>{console.log('init$ fired in APPService')})
   }
 
 
