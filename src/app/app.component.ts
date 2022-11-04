@@ -1,3 +1,4 @@
+import { mergeMap } from 'rxjs/operators';
 import { CategoriesService } from './services/categories.service';
 import { UsersService } from './services/users.service';
 import { APPService } from './services/app.service';
@@ -23,6 +24,17 @@ export class AppComponent implements OnInit {
       usersService: this.usersService,
       categoriesService: this.categoriesService
     }
+    
+    // this.appService.init$
+    this.authService.authSubj
+      .pipe(
+        mergeMap(q=>this.usersService.getUsers()),
+        mergeMap(q=>this.categoriesService.getCategories()),
+      )
+      .subscribe();
+
+      this.appService.init$.next(true)    
+      this.appService.init$.complete()
   }
   
   title = 'mftiming2-ui';

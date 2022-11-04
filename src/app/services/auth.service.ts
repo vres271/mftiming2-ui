@@ -73,6 +73,7 @@ export class AuthService {
         if(res.access_token) {
           this.setAuth(res)
           sessionStorage.setItem('access_token',res.access_token)
+          this.authSubj.next(!!res?.auth)
         }
       }))
   }

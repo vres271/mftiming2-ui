@@ -45,8 +45,8 @@ export class CategoriesComponent implements OnInit  {
     ) {}
  
     ngOnInit() {
-        this.categoriesService.getCategories()
-            .subscribe();
+        // this.categoriesService.getCategories()
+        //     .subscribe();
     }
 
     openDialog(category?: Item) {

@@ -44,9 +44,9 @@ export class UsersComponent implements OnInit  {
     ) {}
  
     ngOnInit() {
-        this.usersService.getUsers()
-            .pipe(mergeMap(q=>this.categoriesService.getCategories()))
-            .subscribe();
+        // this.usersService.getUsers()
+        //     .pipe(mergeMap(q=>this.categoriesService.getCategories()))
+        //     .subscribe();
     }
 
     openDialog(user?: User) {
