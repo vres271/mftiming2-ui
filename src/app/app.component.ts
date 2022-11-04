@@ -25,8 +25,7 @@ export class AppComponent implements OnInit {
       categoriesService: this.categoriesService
     }
     
-    // this.appService.init$
-    this.authService.authSubj
+    this.authService.authSubj$
       .pipe(
         mergeMap(q=>this.usersService.getUsers()),
         mergeMap(q=>this.categoriesService.getCategories()),

@@ -18,7 +18,7 @@ export class authDTO {
 export class AuthService {
   public isAuth: boolean|null = null
   public user: User|null = null;
-  public authSubj:ReplaySubject<boolean> = new ReplaySubject()
+  public authSubj$:ReplaySubject<boolean> = new ReplaySubject()
 
   constructor(
     private apiService:APIService,
@@ -30,13 +30,13 @@ export class AuthService {
       this.auth()
         .pipe(catchError((error: HttpErrorResponse)=>of(null)))
         .subscribe(res=>{
-          this.authSubj.next(!!res?.auth)
+          this.authSubj$.next(!!res?.auth)
         })
     }
   }
 
   getIsAut() {
-    return this.isAuth===null?this.authSubj:of(this.isAuth)
+    return this.isAuth===null?this.authSubj$:of(this.isAuth)
   }
 
   private setAuth(authItem:authDTO):boolean {
@@ -73,7 +73,7 @@ export class AuthService {
         if(res.access_token) {
           this.setAuth(res)
           sessionStorage.setItem('access_token',res.access_token)
-          this.authSubj.next(!!res?.auth)
+          this.authSubj$.next(!!res?.auth)
         }
       }))
   }
