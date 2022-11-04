@@ -39,6 +39,7 @@ import { ItemDialogComponent } from './components/common/item-dialog/item-dialog
 import { UsersDialogComponent } from './components/users/users-dialog/users-dialog.component';
 import { ItemsTableComponent } from './components/common/items-table/items-table.component';
 import { CategoriesComponent } from './components/categories/categories.component';
+import { RacesComponent } from './components/races/races.component';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ import { CategoriesComponent } from './components/categories/categories.componen
     ItemDialogComponent,
     UsersDialogComponent,
     ItemsTableComponent,
-    CategoriesComponent
+    CategoriesComponent,
+    RacesComponent
   ],
   imports: [
     BrowserModule,

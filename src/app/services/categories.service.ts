@@ -21,7 +21,6 @@ export class Category {
 }
 
 export class CategoryDTO {
-  login: string
   name: string
   ageFrom: number|null
   ageTo: number|null

@@ -1,17 +1,9 @@
 <p-dialog [(visible)]="isOpened" [style]="{width: '450px'}" header="Item Details" [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div [formGroup]="itemsForm">
-            <div class="field">
-                <label for="name">name</label>
-                <input type="text" pInputText id="name" formControlName="name"  autofocus />
-            </div>
-            <div class="field">
-                <label for="ageFrom">ageFrom</label>
-                <input type="text" pInputText id="ageFrom" formControlName="ageFrom"  autofocus />
-            </div>
-            <div class="field">
-                <label for="ageTo">ageTo</label>
-                <input type="text" pInputText id="ageTo" formControlName="ageTo"  autofocus />
+            <div class="field" *ngFor="let field of dialogOptions.fields">
+                <label for="{{field.name}}">{{field.name}}</label>
+                <input type="text" pInputText id="{{field.name}}" formControlName="{{field.name}}"  autofocus />
             </div>
         </div>
     </ng-template>

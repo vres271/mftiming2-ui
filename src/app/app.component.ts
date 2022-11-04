@@ -41,6 +41,7 @@ export class AppComponent implements OnInit {
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},
     {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
     {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
+    {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},
   ];
 
   logOut() {

@@ -1,0 +1,11 @@
+<p-toast></p-toast>
+<app-items-table  
+    [tableOptions]="tableOptions"
+    (onNew)="openDialog()"
+    (onEdit)="openDialog($event)"
+    (onDelete)="deleteRace($event)"
+    (onDeleteSelected)="deleteSelectedRaces($event)"
+    (onRefresh)="refreshRaces()"
+    ></app-items-table>
+<app-item-dialog (onItemSave)="saveRace($event)" [dialogOptions]="dialogOptions"></app-item-dialog>
+
