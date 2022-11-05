@@ -40,6 +40,7 @@ import { UsersDialogComponent } from './components/users/users-dialog/users-dial
 import { ItemsTableComponent } from './components/common/items-table/items-table.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { RacesComponent } from './components/races/races.component';
+import { RacersComponent } from './components/racers/racers.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { RacesComponent } from './components/races/races.component';
     UsersDialogComponent,
     ItemsTableComponent,
     CategoriesComponent,
-    RacesComponent
+    RacesComponent,
+    RacersComponent
   ],
   imports: [
     BrowserModule,

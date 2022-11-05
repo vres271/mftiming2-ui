@@ -1,3 +1,4 @@
+import { RacersComponent } from './components/racers/racers.component';
 import { RacesComponent } from './components/races/races.component';
 import { CategoriesComponent } from './components/categories/categories.component';
 import { AuthGuard } from './auth.guard';
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'races', component: RacesComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
+  { path: 'racers', component: RacersComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
 ];
 
 @NgModule({

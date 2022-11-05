@@ -1,3 +1,5 @@
+import { RacesService } from './services/races.service';
+import { RacersService } from './services/racers.service';
 import { mergeMap } from 'rxjs/operators';
 import { CategoriesService } from './services/categories.service';
 import { UsersService } from './services/users.service';
@@ -17,6 +19,8 @@ export class AppComponent implements OnInit {
     public appService: APPService,
     public usersService: UsersService,
     public categoriesService: CategoriesService,
+    public racesService: RacesService,
+    public racersService: RacersService,
     ) {}
 
   ngOnInit(): void {
@@ -29,6 +33,8 @@ export class AppComponent implements OnInit {
       .pipe(
         mergeMap(q=>this.usersService.getUsers()),
         mergeMap(q=>this.categoriesService.getCategories()),
+        mergeMap(q=>this.racesService.getRaces()),
+        mergeMap(q=>this.racersService.getRacers()),
       )
       .subscribe();
 
@@ -42,6 +48,7 @@ export class AppComponent implements OnInit {
     {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
     {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
     {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},
+    {label: 'Racers', icon: 'pi pi-fw pi-clock', routerLink:"/racers"},
   ];
 
   logOut() {

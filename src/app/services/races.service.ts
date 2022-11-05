@@ -41,7 +41,7 @@ export class UpdateRaceDto extends CreateRaceDto {}
   providedIn: 'root'
 })
 export class RacesService extends ItemsService{
-  override entityName = 'Races'
+  override entityName = 'races'
   override items:Race[] = []
   override itemClass = Race
   override createItemDtoClass = CreateRaceDto
