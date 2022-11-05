@@ -1,9 +1,15 @@
-<p-dialog [(visible)]="isOpened" [style]="{width: '450px'}" header="Item Details" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="isOpened" [style]="{width: '450px', minHeight: '500px'}" header="Item Details"  [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
         <div [formGroup]="itemsForm">
-            <div class="field" *ngFor="let field of dialogOptions.fields">
+            <div class="field" *ngFor="let field of dialogOptions.fields" [ngSwitch]="field.type">
                 <label for="{{field.name}}">{{field.name}}</label>
-                <input type="text" pInputText id="{{field.name}}" formControlName="{{field.name}}"  autofocus />
+                <span *ngSwitchCase="undefined"><input type="text" pInputText id="{{field.name}}" formControlName="{{field.name}}" /></span>
+                <span *ngSwitchCase="'select-items'">
+                    <p-dropdown [options]="field.itemsService.items" formControlName="{{field.name}}"  optionValue="{{field.optionValue||'id'}}" optionLabel="{{field.optionLabel||'id'}}" [showClear]="true"></p-dropdown>
+                </span>
+
+                
+                
             </div>
         </div>
     </ng-template>

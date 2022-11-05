@@ -8,6 +8,12 @@ export class Racer {
   userId: number
   raceId: number
   app: any
+  get userFullName():string {
+    return this.app?.services?.usersService?.map?.id[this.userId]?.fullName||''
+  }
+  get raceName():string {
+    return this.app?.services?.racesService?.map?.id[this.raceId]?.name||''
+  }
   toString() {return this.id}
   constructor(item?:any) {
     if(item) {
@@ -19,8 +25,17 @@ export class Racer {
 }
 
 export class RacerDTO {
+  // user: {id:number}
+  // race: {id:number}
+  userId: number
+  raceId: number
   constructor(item?:Racer) {
     if(item) {
+      // this.user = {id:item.userId}
+      // this.race = {id:item.raceId}
+      this.userId = item.userId
+      this.raceId = item.raceId
+
     }
   }
 }

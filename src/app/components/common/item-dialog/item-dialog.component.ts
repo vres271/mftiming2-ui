@@ -17,6 +17,9 @@ export class ItemDialogComponent implements OnInit {
       validators?:any[],
       type?:string,
       default?:any,
+      itemsService?:any,
+      optionValue?:string,
+      optionLabel?:string,
     }[]
   }
   isOpened: boolean = false

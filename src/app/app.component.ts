@@ -26,7 +26,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.appService.services = {
       usersService: this.usersService,
-      categoriesService: this.categoriesService
+      categoriesService: this.categoriesService,
+      racesService: this.racesService,
+      racersService: this.racersService,
     }
     
     this.authService.authSubj$

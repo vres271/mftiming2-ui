@@ -1,3 +1,5 @@
+import { RacesService } from './../../services/races.service';
+import { UsersService } from './../../services/users.service';
 import { Validators } from '@angular/forms';
 import { Item } from './../../services/common/items.service';
 import { ItemDialogComponent } from './../common/item-dialog/item-dialog.component';
@@ -25,23 +27,40 @@ export class RacersComponent implements OnInit  {
         globalFilterFields: ['id'],
         cols: [
             {name:'id'},
-            {name:'userId'},
-            {name:'raceId'},
+            // {name:'userId'},
+            {name:'userFullName'},
+            // {name:'raceId'},
+            {name:'raceName'},
         ]
     }
 
     dialogOptions={
         itemsService: this.racersService,
         fields: [
-            {name:'id', default:0},
-            {name:'userId', default:0},
-            {name:'raceId', default:0},
+            {
+                name:'userId', 
+                type:'select-items', 
+                default:null, 
+                itemsService:this.usersService,
+                optionValue:'id',
+                optionLabel:'fullName',
+            },
+            {
+                name:'raceId', 
+                type:'select-items', 
+                default:null, 
+                itemsService:this.racesService,
+                optionValue:'id',
+                optionLabel:'name',
+            },
         ]
     }
 
     constructor(
         public racersService: RacersService, 
         private messageService: MessageService, 
+        private usersService: UsersService, 
+        private racesService: RacesService, 
     ) {}
  
     ngOnInit() {
@@ -55,6 +74,7 @@ export class RacersComponent implements OnInit  {
     }
 
     saveRacer(racer: Racer) { 
+        console.log(racer);
         (!this.racerId?this.racersService.createRacer(racer):this.racersService.updateRacer(racer, this.racerId))
             .pipe(catchError(this.errorHandler))
             .subscribe(res=>{if(res) this.successMessage(this.racerId?'Racer Updated':'Racer Created')})
