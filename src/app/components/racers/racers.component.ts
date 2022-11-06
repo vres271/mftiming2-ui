@@ -1,3 +1,4 @@
+import { CategoriesService } from './../../services/categories.service';
 import { RacesService } from './../../services/races.service';
 import { UsersService } from './../../services/users.service';
 import { Validators } from '@angular/forms';
@@ -31,6 +32,7 @@ export class RacersComponent implements OnInit  {
             {name:'userFullName'},
             // {name:'raceId'},
             {name:'raceName'},
+            {name:'categoryName'},
         ]
     }
 
@@ -53,6 +55,14 @@ export class RacersComponent implements OnInit  {
                 optionValue:'id',
                 optionLabel:'name',
             },
+            {
+                name:'categoryId', 
+                type:'select-items', 
+                default:null, 
+                itemsService:this.categoriesService,
+                optionValue:'id',
+                optionLabel:'name',
+            },
         ]
     }
 
@@ -61,6 +71,7 @@ export class RacersComponent implements OnInit  {
         private messageService: MessageService, 
         private usersService: UsersService, 
         private racesService: RacesService, 
+        private categoriesService: CategoriesService, 
     ) {}
  
     ngOnInit() {
