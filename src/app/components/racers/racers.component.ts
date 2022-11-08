@@ -5,11 +5,11 @@ import { Validators } from '@angular/forms';
 import { Item } from './../../services/common/items.service';
 import { ItemDialogComponent } from './../common/item-dialog/item-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { Component, OnInit, ViewChild , } from '@angular/core';
+import { catchError, map } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewChild , } from '@angular/core';
 import { RacersService, Racer } from './../../services/racers.service';
 import { MessageService } from 'primeng/api';
-import {  of } from 'rxjs';
+import {  of, pipe, Subscription } from 'rxjs';
 
 
 @Component({
@@ -22,6 +22,7 @@ export class RacersComponent implements OnInit  {
     racerId: number|null = null;
     @ViewChild(ItemDialogComponent) 
     private itemsDialogComponent: ItemDialogComponent
+    private itemsSubscription: Subscription
 
     tableOptions={
         itemsService: this.racersService,
@@ -39,11 +40,11 @@ export class RacersComponent implements OnInit  {
     dialogOptions={
         itemsService: this.racersService,
         fields: [
-            {
+            { 
                 name:'userId', 
                 type:'select-items', 
                 default:null, 
-                itemsService:this.usersService,
+                itemsService: this.usersService.items$,
                 optionValue:'id',
                 optionLabel:'fullName',
             },
@@ -51,7 +52,7 @@ export class RacersComponent implements OnInit  {
                 name:'raceId', 
                 type:'select-items', 
                 default:null, 
-                itemsService:this.racesService,
+                itemsService:this.racesService.items$,
                 optionValue:'id',
                 optionLabel:'name',
             },
@@ -59,7 +60,7 @@ export class RacersComponent implements OnInit  {
                 name:'categoryId', 
                 type:'select-items', 
                 default:null, 
-                itemsService:this.categoriesService,
+                itemsService:this.categoriesService.items$,
                 optionValue:'id',
                 optionLabel:'name',
             },
@@ -77,6 +78,7 @@ export class RacersComponent implements OnInit  {
     ngOnInit() {
         // this.racersService.getRacers()
         //     .subscribe();
+
     }
 
     openDialog(racer?: Item) {
@@ -127,6 +129,7 @@ export class RacersComponent implements OnInit  {
         }
         return of(null)
     }
+
 
 
 }

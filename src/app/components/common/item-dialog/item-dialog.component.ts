@@ -1,6 +1,8 @@
+import { map } from 'rxjs/operators';
 import { Item } from './../../../services/common/items.service';
 import { FormGroup, FormBuilder} from '@angular/forms';
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-item-dialog',
@@ -8,7 +10,7 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
   styleUrls: ['./item-dialog.component.scss']
 })
 
-export class ItemDialogComponent implements OnInit {
+export class ItemDialogComponent implements OnInit, OnDestroy {
   @Output() onItemSave = new EventEmitter<any>()
   @Input() dialogOptions:{
     itemsService: any,
@@ -18,12 +20,14 @@ export class ItemDialogComponent implements OnInit {
       type?:string,
       default?:any,
       itemsService?:any,
+      _items?:any,
       optionValue?:string,
       optionLabel?:string,
     }[]
   }
   isOpened: boolean = false
   itemId: number | null = null;
+  subscriptions: Subscription[] = [];
 
   itemsForm: FormGroup
   defaults:any = {}
@@ -35,6 +39,15 @@ export class ItemDialogComponent implements OnInit {
   ngOnInit(): void {
     let formItems:any = {}
     this.dialogOptions.fields.forEach(field=>{
+      if(field.itemsService) {
+        this.subscriptions.push(
+          field.itemsService
+          .pipe(map((items:any)=>{return [null,...items]}))
+          .subscribe((items:any)=>{
+            field._items = items
+          })
+        ) 
+      }
       this.defaults[field.name] = field.default!==undefined?field.default:null
       let formControll = [field.default]
       if(field.validators) formControll.push(field.validators)
@@ -64,5 +77,9 @@ export class ItemDialogComponent implements OnInit {
     this.onItemSave.emit(item)
     this.hideDialog()
   }
+
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub=>sub.unsubscribe());
+}
 
 }

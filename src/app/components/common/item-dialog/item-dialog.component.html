@@ -5,7 +5,7 @@
                 <label for="{{field.name}}">{{field.name}}</label>
                 <span *ngSwitchCase="undefined"><input type="text" pInputText id="{{field.name}}" formControlName="{{field.name}}" /></span>
                 <span *ngSwitchCase="'select-items'">
-                    <p-dropdown [options]="field.itemsService.items" formControlName="{{field.name}}"  optionValue="{{field.optionValue||'id'}}" optionLabel="{{field.optionLabel||'id'}}" [showClear]="true"></p-dropdown>
+                    <p-dropdown [options]="field._items" placeholder="Select..." emptyMessage="---" formControlName="{{field.name}}" optionValue="{{field.optionValue||'id'}}" optionLabel="{{field.optionLabel||'id'}}" [showClear]="true"></p-dropdown>
                 </span>
 
                 

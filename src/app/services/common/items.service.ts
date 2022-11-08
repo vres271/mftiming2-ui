@@ -3,7 +3,7 @@ import { CategoriesService } from './../categories.service';
 import { APIService } from '../api.service';
 import { map, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 
 export class Item{
   id: number
@@ -26,6 +26,8 @@ export class UpdateItemDto extends CreateItemDto {}
 export class ItemsService {
   public entityName = 'items'
   items:Item[] = []
+  public items$:ReplaySubject<Item[]> = new ReplaySubject()
+
   itemClass = Item
   createItemDtoClass = CreateItemDto
   updateItemDtoClass = UpdateItemDto
@@ -65,6 +67,7 @@ export class ItemsService {
         map((items:Item[])=>{
           this.items = items.map(item=>this.afterGet(this.newItem(item)))
           this.createMap()
+          this.items$.next(this.items)
           return this.items
         })
       )
