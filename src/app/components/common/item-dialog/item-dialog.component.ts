@@ -19,7 +19,7 @@ export class ItemDialogComponent implements OnInit, OnDestroy {
       validators?:any[],
       type?:string,
       default?:any,
-      itemsService?:any,
+      items$?:any,
       _items?:any,
       optionValue?:string,
       optionLabel?:string,
@@ -39,10 +39,10 @@ export class ItemDialogComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     let formItems:any = {}
     this.dialogOptions.fields.forEach(field=>{
-      if(field.itemsService) {
+      if(field.items$) {
         this.subscriptions.push(
-          field.itemsService
-          .pipe(map((items:any)=>{return [null,...items]}))
+          field.items$
+          .pipe(map((items:any)=>{return items}))
           .subscribe((items:any)=>{
             field._items = items
           })
