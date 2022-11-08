@@ -1,9 +1,9 @@
 import { APPService } from './../app.service';
 import { CategoriesService } from './../categories.service';
 import { APIService } from '../api.service';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, last } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, BehaviorSubject  } from 'rxjs';
 
 export class Item{
   id: number
@@ -26,7 +26,7 @@ export class UpdateItemDto extends CreateItemDto {}
 export class ItemsService {
   public entityName = 'items'
   items:Item[] = []
-  public items$:ReplaySubject<Item[]> = new ReplaySubject()
+  public items$:BehaviorSubject<any> = new BehaviorSubject([])
 
   itemClass = Item
   createItemDtoClass = CreateItemDto

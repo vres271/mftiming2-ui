@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { first, last, map } from 'rxjs/operators';
 import { Item } from './../../../services/common/items.service';
 import { FormGroup, FormBuilder} from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
@@ -42,8 +42,11 @@ export class ItemDialogComponent implements OnInit, OnDestroy {
       if(field.items$) {
         this.subscriptions.push(
           field.items$
-          .pipe(map((items:any)=>{return items}))
+          .pipe(
+            map((items:any)=>{return items}),
+          )
           .subscribe((items:any)=>{
+            console.log(`sub in ${field.name}`,items)
             field._items = items
           })
         ) 
