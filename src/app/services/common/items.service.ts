@@ -75,6 +75,7 @@ export class ItemsService {
 
   getItem(itemId:number):Observable<Item> {
     return this.apiService.get(this.entityName+'/'+itemId)
+      .pipe(tap(_=>{this.items$.next(this.items)}))
   }
 
   createItem(newItem:Item):Observable<any> {
@@ -85,6 +86,7 @@ export class ItemsService {
           createdItem = this.afterCreate(createdItem)
           this.items.push(createdItem);
           this.createMap()
+          this.items$.next(this.items)
         })
       )
   }
@@ -98,6 +100,7 @@ export class ItemsService {
           this.items[this.findIndexById(String(itemId))] = updatingItem;
           this.items = [...this.items]
           this.createMap()
+          this.items$.next(this.items)
         })
       )
   }
@@ -108,6 +111,7 @@ export class ItemsService {
         tap((res:any)=>{
           this.items = this.items.filter(item => item.id !== itemId);  
           this.createMap()        
+          this.items$.next(this.items)
         })
       )
   }

@@ -46,7 +46,6 @@ export class ItemDialogComponent implements OnInit, OnDestroy {
             map((items:any)=>{return items}),
           )
           .subscribe((items:any)=>{
-            console.log(`sub in ${field.name}`,items)
             field._items = items
           })
         ) 

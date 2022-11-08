@@ -70,7 +70,7 @@ export class RacersComponent implements OnInit  {
     constructor(
         public racersService: RacersService, 
         private messageService: MessageService, 
-        private usersService: UsersService, 
+        public usersService: UsersService, 
         private racesService: RacesService, 
         private categoriesService: CategoriesService, 
     ) {}
