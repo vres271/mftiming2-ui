@@ -1,95 +1,80 @@
-import { SeasonsService } from './../../services/seasons.service';
 import { Validators } from '@angular/forms';
 import { Item } from './../../services/common/items.service';
 import { ItemDialogComponent } from './../common/item-dialog/item-dialog.component';
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Component, OnInit, ViewChild , } from '@angular/core';
-import { RacesService, Race } from './../../services/races.service';
+import { SeasonsService, Season } from './../../services/seasons.service';
 import { MessageService } from 'primeng/api';
 import {  of } from 'rxjs';
 
 
 @Component({
-    templateUrl: './races.component.html',
-    styleUrls: ['./races.component.scss'],
+    templateUrl: './seasons.component.html',
+    styleUrls: ['./seasons.component.scss'],
     providers: [MessageService]
 })
-export class RacesComponent implements OnInit  {
-    races: Race[];
-    raceId: number|null = null;
+export class SeasonsComponent implements OnInit  {
+    seasons: Season[];
+    seasonId: number|null = null;
     @ViewChild(ItemDialogComponent) 
     private itemsDialogComponent: ItemDialogComponent
 
     tableOptions={
-        itemsService: this.racesService,
+        itemsService: this.seasonsService,
         globalFilterFields: ['name'],
         cols: [
             {name:'name'},
-            {name:'start'},
-            {name:'end'},
-            {name:'seasonName'},
         ]
     }
 
     dialogOptions={
-        itemsService: this.racesService,
+        itemsService: this.seasonsService,
         fields: [
             {name:'name', default:'', validators: [Validators.required]},
-            {
-                name:'seasonId', 
-                type:'select-items', 
-                default:null, 
-                items$:this.seasonsService.items$,
-                optionValue:'id',
-                optionLabel:'name',
-            },
-            {name:'start', default:null},
-            {name:'end', default:null},
         ]
     }
 
     constructor(
-        public racesService: RacesService, 
+        public seasonsService: SeasonsService, 
         private messageService: MessageService, 
-        private seasonsService: SeasonsService, 
     ) {}
  
     ngOnInit() {
-        // this.racesService.getRaces()
+        // this.seasonsService.getSeasons()
         //     .subscribe();
     }
 
-    openDialog(race?: Item) {
-        this.raceId = race?race.id:null
-        this.itemsDialogComponent.openDialog(race)
+    openDialog(season?: Item) {
+        this.seasonId = season?season.id:null
+        this.itemsDialogComponent.openDialog(season)
     }
 
-    saveRace(race: Race) { 
-        (!this.raceId?this.racesService.createRace(race):this.racesService.updateRace(race, this.raceId))
+    saveSeason(season: Season) { 
+        (!this.seasonId?this.seasonsService.createSeason(season):this.seasonsService.updateSeason(season, this.seasonId))
             .pipe(catchError(this.errorHandler))
-            .subscribe(res=>{if(res) this.successMessage(this.raceId?'Race Updated':'Race Created')})
+            .subscribe(res=>{if(res) this.successMessage(this.seasonId?'Season Updated':'Season Created')})
     }
 
-    refreshRaces() {
-      this.racesService.getRaces({force:true})
+    refreshSeasons() {
+      this.seasonsService.getSeasons({force:true})
         .pipe(
           catchError(this.errorHandler)
         )
         .subscribe();
     }
 
-    deleteSelectedRaces(selObject:{items: Race[], callback:Function}) {
-        // this.races = this.races.filter(val => !this.selectedItems?.includes(val));
+    deleteSelectedSeasons(selObject:{items: Season[], callback:Function}) {
+        // this.seasons = this.seasons.filter(val => !this.selectedItems?.includes(val));
         console.log(selObject.items)
         selObject.callback()
-        this.successMessage('Races Deleted')
+        this.successMessage('Seasons Deleted')
     }
 
-    deleteRace(race: Race) {
-        this.racesService.deleteRace(race.id)
+    deleteSeason(season: Season) {
+        this.seasonsService.deleteSeason(season.id)
             .pipe(catchError(this.errorHandler))
-            .subscribe(res=>this.successMessage('Race Deleted'))
+            .subscribe(res=>this.successMessage('Season Deleted'))
 
     }
 

@@ -1,3 +1,4 @@
+import { SeasonsService } from './../../services/seasons.service';
 import { Validators } from '@angular/forms';
 import { Item } from './../../services/common/items.service';
 import { ItemDialogComponent } from './../common/item-dialog/item-dialog.component';
@@ -27,6 +28,7 @@ export class CategoriesComponent implements OnInit  {
             {name:'name'},
             {name:'ageFrom'},
             {name:'ageTo'},
+            {name:'seasonName'},
         ]
     }
 
@@ -34,6 +36,14 @@ export class CategoriesComponent implements OnInit  {
         itemsService: this.categoriesService,
         fields: [
             {name:'name', default:'', validators: [Validators.required]},
+            {
+                name:'seasonId', 
+                type:'select-items', 
+                default:null, 
+                items$:this.seasonsService.items$,
+                optionValue:'id',
+                optionLabel:'name',
+            },
             {name:'ageFrom', default:null},
             {name:'ageTo', default:null},
         ]
@@ -42,6 +52,7 @@ export class CategoriesComponent implements OnInit  {
     constructor(
         public categoriesService: CategoriesService, 
         private messageService: MessageService, 
+        private seasonsService: SeasonsService, 
     ) {}
  
     ngOnInit() {

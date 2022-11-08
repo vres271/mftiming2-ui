@@ -1,3 +1,5 @@
+import { Season } from './seasons.service';
+import { Race } from './races.service';
 import { ItemsService } from './common/items.service';
 import { affectedResponse } from './api.service';
 import { Injectable } from '@angular/core';
@@ -12,8 +14,17 @@ export class Racer {
   get userFullName():string {
     return this.app?.services?.usersService?.map?.id[this.userId]?.fullName||''
   }
+  get race():Race|null {
+    return this.app?.services?.racesService?.map?.id[this.raceId]||null
+  }
   get raceName():string {
-    return this.app?.services?.racesService?.map?.id[this.raceId]?.name||''
+    return this.race?.name||''
+  }
+  get season():Season|null {
+    return this.race?.seasonId&&this.app?.services?.seasonsService?.map?.id[this.race.seasonId]||null
+  }
+  get seasonName():string {
+    return this.season?.name||''
   }
   get categoryName():string {
     return this.app?.services?.categoriesService?.map?.id[this.categoryId]?.name||''

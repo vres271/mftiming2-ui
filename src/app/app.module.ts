@@ -41,6 +41,7 @@ import { ItemsTableComponent } from './components/common/items-table/items-table
 import { CategoriesComponent } from './components/categories/categories.component';
 import { RacesComponent } from './components/races/races.component';
 import { RacersComponent } from './components/racers/racers.component';
+import { SeasonsComponent } from './components/seasons/seasons.component';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { RacersComponent } from './components/racers/racers.component';
     ItemsTableComponent,
     CategoriesComponent,
     RacesComponent,
-    RacersComponent
+    RacersComponent,
+    SeasonsComponent
   ],
   imports: [
     BrowserModule,

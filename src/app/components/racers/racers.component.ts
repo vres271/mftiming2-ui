@@ -34,6 +34,7 @@ export class RacersComponent implements OnInit  {
             // {name:'raceId'},
             {name:'raceName'},
             {name:'categoryName'},
+            {name:'seasonName'},
         ]
     }
 
@@ -87,7 +88,6 @@ export class RacersComponent implements OnInit  {
     }
 
     saveRacer(racer: Racer) { 
-        console.log(racer);
         (!this.racerId?this.racersService.createRacer(racer):this.racersService.updateRacer(racer, this.racerId))
             .pipe(catchError(this.errorHandler))
             .subscribe(res=>{if(res) this.successMessage(this.racerId?'Racer Updated':'Racer Created')})

@@ -8,7 +8,11 @@ export class Race {
   name: string
   start: number|null
   end: number|null
+  seasonId: number
   app: any
+  get seasonName():string {
+    return this.app?.services?.seasonsService?.map?.id[this.seasonId]?.name||''
+  }
   toString() {return this.name}
   constructor(item?:any) {
     if(item) {
@@ -16,6 +20,7 @@ export class Race {
       this.name = item.name
       if(item.start!==undefined) this.start = (item.start===null||item.start==='')?null:1*item.start
       if(item.end!==undefined) this.end = (item.end===null||item.end==='')?null:1*item.end
+      if(item.seasonId!==undefined) this.seasonId = 1*item.seasonId
     }
   }
 }
@@ -25,11 +30,13 @@ export class RaceDTO {
   name: string
   start: number|null
   end: number|null
+  seasonId: number
   constructor(item?:Race) {
     if(item) {
       this.name = item.name
       if(item.start!==undefined) this.start = (item.start===null)?null:1*item.start
       if(item.end!==undefined) this.end = (item.end===null)?null:1*item.end
+      if(item.seasonId!==undefined) this.seasonId = 1*item.seasonId
     }
   }
 }

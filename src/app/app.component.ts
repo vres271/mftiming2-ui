@@ -1,3 +1,4 @@
+import { SeasonsService } from './services/seasons.service';
 import { RacesService } from './services/races.service';
 import { RacersService } from './services/racers.service';
 import { mergeMap } from 'rxjs/operators';
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
     public categoriesService: CategoriesService,
     public racesService: RacesService,
     public racersService: RacersService,
+    public seasonsService: SeasonsService,
     ) {}
 
   ngOnInit(): void {
@@ -29,6 +31,7 @@ export class AppComponent implements OnInit {
       categoriesService: this.categoriesService,
       racesService: this.racesService,
       racersService: this.racersService,
+      seasonsService: this.seasonsService,
     }
     
     this.authService.authSubj$
@@ -37,6 +40,7 @@ export class AppComponent implements OnInit {
         mergeMap(q=>this.categoriesService.getCategories()),
         mergeMap(q=>this.racesService.getRaces()),
         mergeMap(q=>this.racersService.getRacers()),
+        mergeMap(q=>this.seasonsService.getSeasons()),
       )
       .subscribe();
 
@@ -48,9 +52,10 @@ export class AppComponent implements OnInit {
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},
     {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
-    {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
-    {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},
     {label: 'Racers', icon: 'pi pi-fw pi-clock', routerLink:"/racers"},
+    {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},
+    {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
+    {label: 'Seasons', icon: 'pi pi-fw pi-calendar', routerLink:"/seasons"},
   ];
 
   logOut() {

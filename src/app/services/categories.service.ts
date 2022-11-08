@@ -8,7 +8,11 @@ export class Category {
   name: string
   ageFrom: number|null
   ageTo: number|null
+  seasonId: number
   app: any
+  get seasonName():string {
+    return this.app?.services?.seasonsService?.map?.id[this.seasonId]?.name||''
+  }
   toString() {return this.name}
   constructor(item?:any) {
     if(item) {
@@ -16,6 +20,7 @@ export class Category {
       this.name = item.name
       if(item.ageFrom!==undefined) this.ageFrom = (item.ageFrom===null||item.ageFrom==='')?null:1*item.ageFrom
       if(item.ageTo!==undefined) this.ageTo = (item.ageTo===null||item.ageTo==='')?null:1*item.ageTo
+      if(item.seasonId!==undefined) this.seasonId = 1*item.seasonId
     }
   }
 }
@@ -24,11 +29,13 @@ export class CategoryDTO {
   name: string
   ageFrom: number|null
   ageTo: number|null
+  seasonId: number
   constructor(item?:Category) {
     if(item) {
       this.name = item.name
       if(item.ageFrom!==undefined) this.ageFrom = (item.ageFrom===null)?null:1*item.ageFrom
       if(item.ageTo!==undefined) this.ageTo = (item.ageTo===null)?null:1*item.ageTo
+      if(item.seasonId!==undefined) this.seasonId = 1*item.seasonId
     }
   }
 }
