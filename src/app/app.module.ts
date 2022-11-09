@@ -32,6 +32,8 @@ import {InputSwitchModule} from 'primeng/inputswitch';
 import {PasswordModule} from 'primeng/password';
 import {CardModule} from 'primeng/card';
 import {TreeModule} from 'primeng/tree';
+import {DividerModule} from 'primeng/divider';
+import {PanelModule} from 'primeng/panel';
 
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
@@ -45,6 +47,9 @@ import { RacersComponent } from './components/racers/racers.component';
 import { SeasonsComponent } from './components/seasons/seasons.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { RacerRegistrationComponent } from './components/racer-registration/racer-registration.component';
+import { RaceListComponent } from './components/race-list/race-list.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ItemsFilterPipe } from './pipes/items-filter.pipe';
 
 
 @NgModule({
@@ -60,7 +65,10 @@ import { RacerRegistrationComponent } from './components/racer-registration/race
     RacersComponent,
     SeasonsComponent,
     TreeComponent,
-    RacerRegistrationComponent
+    RacerRegistrationComponent,
+    RaceListComponent,
+    ProfileComponent,
+    ItemsFilterPipe
   ],
   imports: [
     BrowserModule,
@@ -94,6 +102,8 @@ import { RacerRegistrationComponent } from './components/racer-registration/race
     CardModule,
     ReactiveFormsModule,
     TreeModule,
+    DividerModule,
+    PanelModule,
    ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]

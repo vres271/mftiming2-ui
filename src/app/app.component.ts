@@ -55,6 +55,7 @@ export class AppComponent implements OnInit {
   title = 'mftiming2-ui';
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},
+    {label: 'Profile', icon: 'pi pi-fw pi-user-edit', routerLink:"/profile"},
     {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
     {label: 'Racers', icon: 'pi pi-fw pi-link', routerLink:"/racers"},
     {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},

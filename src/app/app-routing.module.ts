@@ -1,3 +1,4 @@
+import { ProfileComponent } from './components/profile/profile.component';
 import { RacerRegistrationComponent } from './components/racer-registration/racer-registration.component';
 import { TreeComponent } from './components/tree/tree.component';
 import { SeasonsComponent } from './components/seasons/seasons.component';
@@ -12,6 +13,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard], },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'categories', component: CategoriesComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'races', component: RacesComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
