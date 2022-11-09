@@ -44,6 +44,7 @@ import { RacesComponent } from './components/races/races.component';
 import { RacersComponent } from './components/racers/racers.component';
 import { SeasonsComponent } from './components/seasons/seasons.component';
 import { TreeComponent } from './components/tree/tree.component';
+import { RacerRegistrationComponent } from './components/racer-registration/racer-registration.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { TreeComponent } from './components/tree/tree.component';
     RacesComponent,
     RacersComponent,
     SeasonsComponent,
-    TreeComponent
+    TreeComponent,
+    RacerRegistrationComponent
   ],
   imports: [
     BrowserModule,

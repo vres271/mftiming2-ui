@@ -1,0 +1,37 @@
+<div class="grid">
+    <div class="col-4"></div>
+    <div class="col-4 ">
+        <p-card [formGroup]="itemsForm" header="Registration to Race">
+            <ng-template pTemplate="header" ></ng-template>
+            <div class="field" >
+                <p-dropdown 
+                    [options]="racesService.items" 
+                    placeholder="Select..." 
+                    emptyMessage="---" 
+                    formControlName="raceId" 
+                    optionValue="id" 
+                    optionLabel="name" 
+                    [showClear]="true"
+                    [style]="{width: '450px'}"
+                    >
+                </p-dropdown>
+            </div>
+            <div class="field" >
+                <p-dropdown 
+                    [options]="categoriesService.items" 
+                    placeholder="Select..." 
+                    emptyMessage="---" 
+                    formControlName="categoryId" 
+                    optionValue="id" 
+                    optionLabel="name" 
+                    [showClear]="true"
+                    [style]="{width: '450px'}"
+                    >
+                </p-dropdown>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Register" [disabled]="!itemsForm.valid" icon="pi pi-check" class="p-button-primary" (click)="register()"></button>
+            </ng-template>
+        </p-card>
+    </div>
+</div>

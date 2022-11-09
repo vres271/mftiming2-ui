@@ -61,6 +61,7 @@ export class AppComponent implements OnInit {
     {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
     {label: 'Seasons', icon: 'pi pi-fw pi-calendar', routerLink:"/seasons"},
     {label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink:"/tree"},
+    {label: 'Racer Registration', icon: 'pi pi-fw pi-link', routerLink:"/racer-registration"},
   ];
 
   logOut() {

@@ -1,8 +1,9 @@
+import { Subscription } from 'rxjs';
 import { RacersService } from './../../services/racers.service';
 import { CategoriesService } from './../../services/categories.service';
 import { RacesService } from './../../services/races.service';
-import { SeasonsService } from './../../services/seasons.service';
-import { Component, OnInit } from '@angular/core';
+import { SeasonsService, Season } from './../../services/seasons.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {TreeNode} from 'primeng/api';
 
 @Component({
@@ -10,8 +11,9 @@ import {TreeNode} from 'primeng/api';
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.scss']
 })
-export class TreeComponent implements OnInit {
+export class TreeComponent implements OnInit, OnDestroy {
   itemsTree: TreeNode[] = [];
+  subscriptions: Subscription[] = [];
 
   constructor(
     private seasonsService: SeasonsService,
@@ -32,33 +34,39 @@ export class TreeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.seasonsService.items.forEach(season=>{
-      const seasonItem = this.createNode(season.id, season.name, 'calendar', 'calendar')
+    this.seasonsService.items$
+      .subscribe((items:Season[])=>items.forEach(season=>{
+        const seasonItem = this.createNode(season.id, season.name, 'calendar', 'calendar')
 
-      const racesFolder = this.createNode(0, 'Races', 'clock', 'clock')
-      seasonItem.children?.push(racesFolder)
-      this.racesService.items.filter(race=>race.seasonId===season.id).forEach(race=>{
-        const raceItem = this.createNode(race.id, race.name, 'clock', 'clock')
+        const racesFolder = this.createNode(0, 'Races', 'clock', 'clock')
+        seasonItem.children?.push(racesFolder)
+        this.racesService.items.filter(race=>race.seasonId===season.id).forEach(race=>{
+          const raceItem = this.createNode(race.id, race.name, 'clock', 'clock')
 
-        this.racersService.items.filter(racer=>racer.raceId===race.id).forEach(racer=>{
-          const racerItem = this.createNode(racer.id, racer.userFullName+' : '+racer.categoryName, 'user', 'user')
-          raceItem?.children?.push(racerItem)
+          this.racersService.items.filter(racer=>racer.raceId===race.id).forEach(racer=>{
+            const racerItem = this.createNode(racer.id, racer.userFullName+' : '+racer.categoryName, 'user', 'user')
+            raceItem?.children?.push(racerItem)
+          })
+
+          racesFolder?.children?.push(raceItem)
         })
 
-        racesFolder?.children?.push(raceItem)
+        const categoriesFolder = this.createNode(0, 'Categories', 'users', 'users')
+        seasonItem.children?.push(categoriesFolder)
+        this.categoriesService.items.filter(category=>category.seasonId===season.id).forEach(category=>{
+          const categoryItem = this.createNode(category.id, category.name, 'users', 'users')
+          categoriesFolder?.children?.push(categoryItem)
+        })
+
+
+        this.itemsTree.push(seasonItem)
       })
+    )
 
-      const categoriesFolder = this.createNode(0, 'Categories', 'users', 'users')
-      seasonItem.children?.push(categoriesFolder)
-      this.categoriesService.items.filter(category=>category.seasonId===season.id).forEach(category=>{
-        const categoryItem = this.createNode(category.id, category.name, 'users', 'users')
-        categoriesFolder?.children?.push(categoryItem)
-      })
+  }
 
-
-      this.itemsTree.push(seasonItem)
-    })
-
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub=>sub.unsubscribe());
   }
 
 }
