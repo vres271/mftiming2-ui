@@ -56,10 +56,11 @@ export class AppComponent implements OnInit {
   menuItems: MenuItem[] = [
     {label: 'Home', icon: 'pi pi-fw pi-home', routerLink:"/"},
     {label: 'Users', icon: 'pi pi-fw pi-user', routerLink:"/users"},
-    {label: 'Racers', icon: 'pi pi-fw pi-clock', routerLink:"/racers"},
+    {label: 'Racers', icon: 'pi pi-fw pi-link', routerLink:"/racers"},
     {label: 'Races', icon: 'pi pi-fw pi-clock', routerLink:"/races"},
     {label: 'Categories', icon: 'pi pi-fw pi-users', routerLink:"/categories"},
     {label: 'Seasons', icon: 'pi pi-fw pi-calendar', routerLink:"/seasons"},
+    {label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink:"/tree"},
   ];
 
   logOut() {

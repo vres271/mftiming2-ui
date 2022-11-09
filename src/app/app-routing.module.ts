@@ -1,3 +1,4 @@
+import { TreeComponent } from './components/tree/tree.component';
 import { SeasonsComponent } from './components/seasons/seasons.component';
 import { RacersComponent } from './components/racers/racers.component';
 import { RacesComponent } from './components/races/races.component';
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'races', component: RacesComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'racers', component: RacersComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
   { path: 'seasons', component: SeasonsComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
+  { path: 'tree', component: TreeComponent, canActivate: [AuthGuard],  canActivateChild: [AuthGuard],},
 ];
 
 @NgModule({

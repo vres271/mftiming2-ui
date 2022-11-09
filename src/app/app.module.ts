@@ -31,6 +31,7 @@ import {MenubarModule} from 'primeng/menubar';
 import {InputSwitchModule} from 'primeng/inputswitch';
 import {PasswordModule} from 'primeng/password';
 import {CardModule} from 'primeng/card';
+import {TreeModule} from 'primeng/tree';
 
 import { AppComponent } from './app.component';
 import { UsersComponent } from './components/users/users.component';
@@ -42,6 +43,7 @@ import { CategoriesComponent } from './components/categories/categories.componen
 import { RacesComponent } from './components/races/races.component';
 import { RacersComponent } from './components/racers/racers.component';
 import { SeasonsComponent } from './components/seasons/seasons.component';
+import { TreeComponent } from './components/tree/tree.component';
 
 
 @NgModule({
@@ -55,7 +57,8 @@ import { SeasonsComponent } from './components/seasons/seasons.component';
     CategoriesComponent,
     RacesComponent,
     RacersComponent,
-    SeasonsComponent
+    SeasonsComponent,
+    TreeComponent
   ],
   imports: [
     BrowserModule,
@@ -88,6 +91,7 @@ import { SeasonsComponent } from './components/seasons/seasons.component';
     PasswordModule,
     CardModule,
     ReactiveFormsModule,
+    TreeModule,
    ],
   providers: [AuthGuard],
   bootstrap: [AppComponent]
