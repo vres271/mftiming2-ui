@@ -1,13 +1,14 @@
 import { SeasonsService } from './services/seasons.service';
 import { RacesService } from './services/races.service';
 import { RacersService } from './services/racers.service';
-import { mergeMap } from 'rxjs/operators';
+import { filter, mergeMap, switchMap, tap } from 'rxjs/operators';
 import { CategoriesService } from './services/categories.service';
 import { UsersService } from './services/users.service';
 import { APPService } from './services/app.service';
 import { Component, OnInit } from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import { AuthService } from './services/auth.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -36,11 +37,14 @@ export class AppComponent implements OnInit {
     
     this.authService.authSubj$
       .pipe(
-        mergeMap(q=>this.usersService.getUsers()),
-        mergeMap(q=>this.categoriesService.getCategories()),
-        mergeMap(q=>this.racesService.getRaces()),
-        mergeMap(q=>this.racersService.getRacers()),
-        mergeMap(q=>this.seasonsService.getSeasons()),
+        filter(state=>state.auth===true),
+        switchMap(res=>forkJoin({
+          users: this.usersService.getUsers(),
+          categories: this.categoriesService.getCategories(),
+          races: this.racesService.getRaces(),
+          racers: this.racersService.getRacers(),
+          seasons: this.seasonsService.getSeasons(),
+        }))
       )
       .subscribe();
 

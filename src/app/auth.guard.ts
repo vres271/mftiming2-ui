@@ -1,4 +1,4 @@
-import { tap } from 'rxjs/operators';
+import { tap, map, filter } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AuthService } from './services/auth.service';
 import { Inject, Injectable } from "@angular/core"
@@ -24,4 +24,5 @@ export class AuthGuard
   ): Observable<boolean> {
     return this.canActivate(next, state)
   }
+  
 }

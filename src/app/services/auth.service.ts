@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, filter, map } from 'rxjs/operators';
 import { APIService } from './api.service';
-import { Observable, of, BehaviorSubject, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, BehaviorSubject } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { User } from './users.service';
 
@@ -12,13 +12,17 @@ export class authDTO {
   user:User
 } 
 
+class authState {
+  auth:boolean|null = null
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   public isAuth: boolean|null = null
   public user: User|null = null;
-  public authSubj$:ReplaySubject<boolean> = new ReplaySubject()
+  public authSubj$ = new BehaviorSubject<authState>({auth:null})
 
   constructor(
     private apiService:APIService,
@@ -28,21 +32,29 @@ export class AuthService {
     if(savedAccessToken) {
       this.apiService.setAccessToken(savedAccessToken)
       this.auth()
-        .pipe(catchError((error: HttpErrorResponse)=>of(null)))
+        .pipe(catchError((error: HttpErrorResponse)=>{
+          this.authSubj$.next({auth:false})
+          return of(null)
+        }))
         .subscribe(res=>{
-          this.authSubj$.next(!!res?.auth)
+          //this.authSubj$.next(!!res?.auth)
         })
     }
   }
 
-  getIsAut() {
-    return this.isAuth===null?this.authSubj$:of(this.isAuth)
+  getIsAut():Observable<boolean> {
+    return this.authSubj$
+      .pipe(
+        filter(state=>state.auth!==null),
+        map(state=>!!state.auth),
+      )
   }
 
   private setAuth(authItem:authDTO):boolean {
     this.isAuth = authItem.auth||authItem.access_token!==''
     this.user = new User(authItem.user)
     if(authItem.access_token) this.apiService.setAccessToken(authItem.access_token)
+    this.authSubj$.next({auth:this.isAuth})
     return this.isAuth
   }
 
@@ -50,6 +62,7 @@ export class AuthService {
     this.isAuth = false
     this.user = null
     this.apiService.clearAccessToken()
+    this.authSubj$.next({auth:false})
     return !this.isAuth
   }
 
@@ -73,7 +86,6 @@ export class AuthService {
         if(res.access_token) {
           this.setAuth(res)
           sessionStorage.setItem('access_token',res.access_token)
-          this.authSubj$.next(!!res?.auth)
         }
       }))
   }
@@ -84,6 +96,7 @@ export class AuthService {
           this.unsetAuth()
           sessionStorage.removeItem('access_token')
           this.router.navigate(['/' ]);
+          this.authSubj$.next({auth:false})
       }))
   }
 
