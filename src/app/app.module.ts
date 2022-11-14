@@ -1,7 +1,8 @@
+import { OfflineInterceptor } from './interceptors/offline.interceptor';
 import { AuthGuard } from './auth.guard';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -105,7 +106,14 @@ import { ItemsFilterPipe } from './pipes/items-filter.pipe';
     DividerModule,
     PanelModule,
    ],
-  providers: [AuthGuard],
+  providers: [
+    AuthGuard,
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: OfflineInterceptor,
+    //   multi: true,
+    // }    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
