@@ -1,3 +1,4 @@
+import { RaceEvent, RaceEventsService } from './../../services/race-events.service';
 import { CategoriesService } from './../../services/categories.service';
 import { RacesService } from './../../services/races.service';
 import { UsersService } from './../../services/users.service';
@@ -74,6 +75,7 @@ export class RacersComponent implements OnInit  {
         public usersService: UsersService, 
         private racesService: RacesService, 
         private categoriesService: CategoriesService, 
+        private raceEventsService: RaceEventsService, 
     ) {}
  
     ngOnInit() {
@@ -94,11 +96,13 @@ export class RacersComponent implements OnInit  {
     }
 
     refreshRacers() {
-      this.racersService.getRacers({force:true})
-        .pipe(
-          catchError(this.errorHandler)
-        )
-        .subscribe();
+        this.racersService.getRacers({force:true})
+            .pipe(
+            catchError(this.errorHandler)
+            )
+            .subscribe();
+        this.raceEventsService.createRaceEvent(new RaceEvent({type:2,racerId:30,raceId:2}))
+            .subscribe(res=>{console.log(res)});
     }
 
     deleteSelectedRacers(selObject:{items: Racer[], callback:Function}) {
