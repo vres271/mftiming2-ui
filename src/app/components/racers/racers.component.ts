@@ -101,7 +101,11 @@ export class RacersComponent implements OnInit  {
             catchError(this.errorHandler)
             )
             .subscribe();
-        this.raceEventsService.createRaceEvent(new RaceEvent({type:2,racerId:30,raceId:2}))
+        this.raceEventsService.createRaceEvent(new RaceEvent({
+            type:2,
+            racerId:'7627b253-6536-4f1f-8f75-6fa5cc34c78b',
+            raceId:'f0f110bb-0bab-4387-a691-2263e0d2b460'
+        }))
             .subscribe(res=>{console.log(res)});
     }
 
